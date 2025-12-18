@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Result Checker - Peculiar School</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="main-login-container">
+        <h2>Student Result Checker</h2>
+        <p>Enter your full name to view your scores.</p>
+        
+        <input type="text" id="searchName" placeholder="Full Name (e.g. GOODNEWS OVIE)">
+        <button onclick="fetchResults()" style="margin-top: 10px;">View Results</button>
+
+        <div id="resultBox" style="display:none; margin-top:20px; padding:20px; background:#ffffff; border: 2px solid #4B0082; border-radius:12px; color:#333; text-align: left;">
+            <h3 style="text-align:center; color:#4B0082;">OFFICIAL REPORT SHEET</h3>
+            <hr>
+            <p><strong>Mathematics:</strong> <span id="math"></span></p>
+            <p><strong>English:</strong> <span id="english"></span></p>
+            <p><strong>Science:</strong> <span id="science"></span></p>
+            <hr>
+            <p><strong>Total Score:</strong> <span id="total" style="font-weight:bold;"></span> / 300</p>
+            <p><strong>Average:</strong> <span id="average" style="font-weight:bold;"></span>%</p>
+            <p><strong>Final Grade:</strong> <span id="grade" style="font-size:1.2em; color:green; font-weight:bold;"></span></p>
+        </div><button onclick="window.print()" style="margin-top: 20px; background-color: #28a745; width: 100%;">Print Report Card</button>
+        <button onclick="window.print()" class="no-print" style="margin-top: 20px; background-color: #28a745; color: white; padding: 12px; width: 100%; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px;">
+    Print Official Report Sheet
+</button>
+
+<style>
+/* CSS to make the printed page look like a real document */
+@media print {
+    body * { visibility: hidden; }
+    #resultBox, #resultBox * { visibility: visible; }
+    #resultBox { 
+        position: absolute; 
+        left: 0; 
+        top: 0; 
+        width: 100%; 
+        border: 2px solid #000; /* Professional border for print */
+        padding: 40px;
+    }
+    .no-print, button, a { display: none !important; }
+}
+</style>
+        <p id="resMsg" style="color:red; margin-top:10px;"></p>
+        <a href="index.html" style="display:block; margin-top:20px;">Return to Dashboard</a>
+    </div><button onclick="window.print()" class="print-hide" style="margin-top: 20px; background-color: #28a745; color: white; padding: 10px; width: 100%; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
+    🖨️ Print Official Result
+</button>
+
+ <script>
+    async function fetchResults() {
+        const name = document.getElementById('searchName').value.trim();
+        const resMsg = document.getElementById('resMsg');
+        const resultBox = document.getElementById('resultBox');
+
+        try {
+            const response = await fetch(`/api/results/${name}`);
+            const data = await response.json();
+
+            if (response.ok) {
+                resultBox.style.display = 'block';
+                document.getElementById('math').innerText = data.math || 0;
+                document.getElementById('english').innerText = data.english || 0;
+                document.getElementById('science').innerText = data.science || 0;
+                
+                // Final Grade Calculation
+                const total = Number(data.math || 0) + Number(data.english || 0) + Number(data.science || 0);
+                document.getElementById('total').innerText = total;
+                document.getElementById('average').innerText = (total / 3).toFixed(1);
+                resMsg.innerText = "";
+            } else {
+                resMsg.innerText = "Student not found.";
+                resultBox.style.display = 'none';
+            }
+        } catch (error) {
+            resMsg.innerText = "Check your CMD window! Is MongoDB running?";
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+/* General Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Header Styling */
+header {
+    background-color: #2D1B7B; /* Primary Purple */
+    color: white;
+    padding: 2rem;
+    text-align: center;
+    border-bottom: 5px solid #D32F2F; /* Accent Red */
+}
+
+header h1 {
+    margin: 0;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Login Container */
+.login-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+#loginForm {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+    border-top: 8px solid #00AEEF; /* Sky Blue Accent */
+}
+
+#loginForm h2 {
+    color: #2D1B7B;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+/* Input Fields */
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box; /* Ensures padding doesn't affect width */
+}
+
+input:focus {
+    outline: none;
+    border-color: #2D1B7B;
+}
+
+/* Button Styling */
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #2D1B7B;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #D32F2F; /* Changes to Red on hover */
+}
+
+/* Footer & Motto */
+footer {
+    background-color: #2D1B7B;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 0.9rem;
+}
+
+/* Motto styling based on logo ribbon */
+.motto {
+    font-style: italic;
+    color: #F8BBD0; /* Soft Pink from the book */
+    display: block;
+    margin-top: 5px;
+}
+@media print {
+    /* Hide everything except the result box when printing */
+    body * { visibility: hidden; }
+    #resultBox, #resultBox * { visibility: visible; }
+    #resultBox {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        border: none;
+    }
+    button, a { display: none !important; } /* Hide buttons on the paper */
+}@media print {
+    body * { visibility: hidden; }
+    #resultBox, #resultBox * { visibility: visible; }
+    #resultBox { position: absolute; left: 0; top: 0; width: 100%; border: none; }
+    .print-btn, a, button { display: none !important; }
+}@media print {
+    body * { visibility: hidden; }
+    #resultBox, #resultBox * { visibility: visible; }
+    #resultBox { position: absolute; left: 0; top: 0; width: 100%; border: none; }
+    .print-hide, a, button { display: none !important; }
+}
