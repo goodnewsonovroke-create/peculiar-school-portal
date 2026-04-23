@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Peculiar School Portal</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body class="page-base page-login"> <div class="container" style="max-width: 450px; text-align: center;">
+        <img src="./school-logo.png.jpg" alt="Logo" width="120">
+        <h2 class="PH-purple line-condensed">STUDENT RESULT PORTAL</h2>
+        <p class="PH-subtext line-condensed">Check your academic performance securely.</p>
+        
+        <input type="text" id="student_name" placeholder="FULL NAME (e.g. GOODNEWS ONAVROKE)">
+        <input type="text" id="student_id" placeholder="STUDENT ID (e.g. PS/2026/001)">
+        
+        <button class="btn" onclick="checkResult()">SEARCH RESULT</button>
+        
+        <p style="margin-top: 20px;"><a href="dashboard.html" style="color: #4b1c8d;">Staff Member? Access Portal</a></p>
+    </div>
+
+    <script>
+   async function checkResult() {
+    const name = document.getElementById('student_name').value.trim();
+    const id = document.getElementById('student_id').value.trim();
+    const btn = document.querySelector('.btn'); // Targets your search button
+    
+    if(!name || !id) return alert("Please enter both Name and ID.");
+
+    // Change button text to show it's working
+    btn.innerText = "SEARCHING...";
+    btn.style.opacity = "0.7";
+
+    try {
+        const res = await fetch(`http://localhost:3000/api/check-result?name=${name}&id=${id}`);
+        
+        // If the server says "404 Not Found" or is offline
+        if (!res.ok) {
+            throw new Error("Student not found or Server is offline.");
+        }
+        
+        const data = await res.json();
+        
+        // STRICT CHECK: Only redirect if we have real data from the database
+        if (Array.isArray(data) && data.length > 0) {
+            localStorage.setItem('studentResult', JSON.stringify(data));
+            window.location.href = 'results.html'; // Safe to redirect now!
+        } else {
+            throw new Error("No grades found for this student.");
+        }
+        
+    } catch (err) { 
+        // This stops the redirect and tells you exactly what went wrong
+        alert("❌ " + err.message + "\n\nEnsure 'node server.js' is running in VS Code.");
+        
+        // Reset the button so you can try again
+        btn.innerText = "SEARCH RESULT"; 
+        btn.style.opacity = "1";
+    }
+}
+    </script>
+</body>
+</html>

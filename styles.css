@@ -1,0 +1,118 @@
+/* --- Global Peculiar School Styles --- */
+:root {
+    --PH-purple: #4b1c8d; /* Peculiar Purple */
+    --PH-subtext: #D4AF37; /* Metallic Gold */
+    --PH-address: #333; /* Dark Gray for readability */
+    --background-gray: url(bg.jpg)
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-gray);
+    color: #333;
+}
+
+/* Base handling for full-screen background images */
+.page-base {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    /* 1. Guarantees the background fits the page perfectly without repeating */
+.page-base {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: cover; /* Forces image to scale and fit the screen */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Keeps image still if the page scrolls */
+}
+
+/* 2. NEW: Pins the buttons to the top corners */
+.top-nav {
+    position: absolute; /* Breaks it out of the center alignment */
+    top: 20px;
+    left: 30px;
+    right: 30px;
+    display: flex;
+    justify-content: space-between; /* Pushes one to the left, one to the right */
+    z-index: 1000; /* Keeps buttons above the background */
+}
+}
+
+/* --- Unique Page Background Images --- */
+/* Update these lines in your styles.css */
+.page-login { 
+    background-image: linear-gradient(rgba(244, 244, 249, 0.4), rgba(244, 244, 249, 0.18)), url('./bg-login.jpg'); 
+} 
+.page-upload { 
+    background-image: linear-gradient(rgba(244, 244, 249, 0.85), rgba(244, 244, 249, 0.85)), url('./bg-upload.jpg'); 
+}
+.page-dashboard { 
+    background-image: linear-gradient(rgba(244, 244, 249, 0.85), rgba(244, 244, 249, 0.85)), url('./bg-dashboard.jpg'); 
+}
+/* Condensed spacing to fix the "too much" line-height issue */
+.line-condensed { line-height: 1.2 !important; margin: 5px 0 !important; }
+
+/* colored header text elements */
+.PH-purple { color: var(--PH-purple); }
+.PH-subtext { color: var(--PH-subtext); }
+.PH-address { color: var(--PH-address); }
+
+/* Main Container */
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    background: rgba(255, 255, 255, 0.07); /* Semi-transparent to view background */
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.btn {
+    background-color: var(--PH-purple);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+}
+
+.btn:hover { background-color: #3a156e; }
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+table, th, td { border: 1px solid #ddd; }
+/* Reduced table cell padding to fix excessive spacing */
+th, td { padding: 8px; text-align: center; }
+th { background-color: var(--PH-purple); color: white; }
+
+@media print {
+    .no-print { display: none; }
+    body { background: white; padding: 0; }
+    .container { box-shadow: none; border: 2px solid black; background: white;}
+}

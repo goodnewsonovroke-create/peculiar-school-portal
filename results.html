@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Terminal Report Slip - Peculiar High School</title>
+    <link rel="stylesheet" href="./styles.css">
+    <style>
+        /* Locking in the Vertical Document Layout */
+        .slip-container {
+            display: block !important; /* Prevents horizontal scrambling */
+            max-width: 850px;
+            margin: 60px auto 20px auto; /* Added top margin to clear the buttons */
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border-radius: 8px;
+            position: relative;
+        }
+        
+        /* Pinned Navigation Buttons */
+        .top-nav {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            z-index: 1000;
+        }
+
+        /* Restored Header Layout */
+        .slip-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 3px solid var(--PH-purple); 
+            padding-bottom: 10px; 
+            margin-bottom: 20px;
+        }
+        .school-info { text-align: center; flex: 1; }
+        
+        /* Restored Meta Grid */
+        .meta-grid { 
+            display: grid; 
+            grid-template-columns: 2fr 1fr; 
+            margin: 20px 0; 
+            gap: 20px;
+        }
+        .passport-box {
+            width: 120px; height: 120px; border: 1px solid #333; margin-left: auto;
+        }
+        .passport-box img { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* Restored Grading/Skills Grid */
+        .grading-skills-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 20px; 
+            margin-top: 20px; 
+        }
+        
+        /* Restored Remarks Box */
+        .remarks-box { 
+            display: block;
+            border: 1px solid #333; 
+            padding: 15px; 
+            margin-top: 20px; 
+            background-color: #fcfcfc;
+        }
+        .signatures { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-top: 50px; 
+            font-weight: bold; 
+        }
+        
+        /* Print Rules */
+        @media print {
+            body { background: white; padding: 0; }
+            .page-base { background-image: none !important; }
+            .slip-container { box-shadow: none; border: none; margin: 0 auto; padding: 0; }
+            .no-print { display: none !important; }
+        }
+    </style>
+</head>
+<body class="page-base page-dashboard"> 
+
+    <div class="no-print top-nav">
+        <button class="btn" style="width: auto; margin: 0; font-weight: bold;" onclick="window.print()">🖨️ PRINT</button>
+        <button class="btn" style="width: auto; background-color: #555; margin: 0; font-weight: bold;" onclick="window.location.href='index.html'">🔙 BACK</button>
+    </div>
+
+    <div class="slip-container" id="printable-area">
+        <div class="slip-header">
+            <img src="./PCA LOGO.png.jpg" width="100" alt="Logo Left">
+            <div class="school-info">
+                <h1 style="margin: 0; padding: 0; font-size: 26px;" class="PH-purple line-condensed">PECULIAR HIGH SCHOOL</h1>
+                <p style="margin: 0; padding: 0; font-size: 14px; font-weight: bold;" class="PH-subtext line-condensed">CRECHE, NURSERY, GRADE & SECONDARY</p>
+                <p style="margin: 0; padding: 0; font-size: 12px;" class="PH-address line-condensed">ADDRESS: Onyeayana's Compound, Umuomahe Village, Obodogba Quarters Okpanam Delta State</p>
+                <p style="margin: 0; padding: 0; font-size: 13px; font-weight: bold; margin-top: 5px;" class="PH-subtext line-condensed">Motto: Study To Show Yourself Approved</p>
+                <h3 class="PH-purple line-condensed" style="margin-top: 10px;">TERMINAL REPORT SLIP</h3>
+            </div>
+            <img src="./school-logo.png.jpg" width="100" alt="Logo Right">
+        </div>
+
+        <div class="meta-grid">
+            <div style="font-size: 16px; line-height: 1.8;">
+               <p style="margin: 0;"><strong>NAME:</strong> <span id="r_name">Loading...</span></p>
+<p style="margin: 0;"><strong>STUDENT ID:</strong> <span id="r_id">Loading...</span></p>
+<p style="margin: 0;"><strong>CLASS:</strong> <span id="r_class">Loading...</span></p>
+<p style="margin: 0;"><strong>TERM:</strong> <span id="r_term">Loading...</span> 2026</p>
+            </div>
+            <div class="passport-box">
+                <img id="r_passport" src="" alt="Student Passport" style="display: none;">
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="text-align: left;">SUBJECT</th>
+                    <th>CA (40)</th>
+                    <th>EXAM (60)</th>
+                    <th>TOTAL (100)</th>
+                    <th>GRADE</th>
+                </tr>
+            </thead>
+            <tbody id="r_body"></tbody>
+        </table>
+
+        <div class="grading-skills-grid">
+            <table style="font-size: 12px;">
+                <thead><tr><th colspan="2">KEY TO GRADING</th></tr></thead>
+                <tbody>
+                    <tr><td>75 - 100</td><td>A (Excellent)</td></tr>
+                    <tr><td>65 - 74</td><td>B (Very Good)</td></tr>
+                    <tr><td>50 - 64</td><td>C (Credit)</td></tr>
+                    <tr><td>45 - 49</td><td>D (Pass)</td></tr>
+                    <tr><td>0 - 44</td><td>F (Fail)</td></tr>
+                </tbody>
+            </table>
+
+            <table style="font-size: 12px;">
+                <thead><tr><th colspan="2">AFFECTIVE DOMAIN (Rated 1-5)</th></tr></thead>
+                <tbody id="r_skills"></tbody>
+            </table>
+        </div>
+
+        <div class="remarks-box">
+            <p style="margin-top: 0;"><strong>CLASS TEACHER'S REMARK:</strong><br><span id="r_tc">Loading...</span></p>
+            <p style="border-top: 1px dashed #ccc; padding-top: 10px;"><strong>PRINCIPAL'S REMARK:</strong><br><span id="r_pc">Loading...</span></p>
+        </div>
+
+        <div class="signatures">
+            <p>Class Teacher's Sign: ____________________</p>
+            <p>Principal's Sign/Stamp: ____________________</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                const rawData = localStorage.getItem('studentResult');
+                if (!rawData) {
+                    alert("⚠️ No result data found! Redirecting to search page.");
+                    window.location.href = 'index.html';
+                    return;
+                }
+
+                const data = JSON.parse(rawData);
+                if (!data || !Array.isArray(data) || data.length === 0) {
+                    alert("⚠️ Invalid data received. Please search again.");
+                    localStorage.removeItem('studentResult');
+                    window.location.href = 'index.html';
+                    return;
+                }
+
+                const s = data[0]; 
+                // Find where you load the Student Bio (s.student_name, etc.) and add this line:
+document.getElementById('r_name').innerText = s.student_name || "N/A";
+document.getElementById('r_id').innerText = s.student_id || "N/A";
+document.getElementById('r_class').innerText = s.student_class || "N/A";
+document.getElementById('r_term').innerText = s.term || "N/A"; // NEW LINE
+                
+                const passportImg = document.getElementById('r_passport');
+                if (s.passport && s.passport.trim() !== "") {
+                    passportImg.src = s.passport;
+                    passportImg.style.display = 'block';
+                }
+                
+                document.getElementById('r_tc').innerText = s.teacher_comment || "None provided.";
+                document.getElementById('r_pc').innerText = s.principal_comment || "None provided.";
+
+                const tbody = document.getElementById('r_body');
+                tbody.innerHTML = ''; 
+                
+                data.forEach(row => {
+                    const total = parseInt(row.total) || 0;
+                    let grade = 'F';
+                    if (total >= 75) grade = 'A';
+                    else if (total >= 65) grade = 'B';
+                    else if (total >= 50) grade = 'C';
+                    else if (total >= 45) grade = 'D';
+
+                    tbody.innerHTML += `
+                        <tr>
+                            <td style="text-align: left; font-weight: bold;">${row.subject}</td>
+                            <td>${row.ca_score}</td>
+                            <td>${row.exam_score}</td>
+                            <td style="font-weight: bold;">${total}</td>
+                            <td style="font-weight: bold; color: ${grade === 'F' ? 'red' : 'green'};">${grade}</td>
+                        </tr>
+                    `;
+                });
+
+                const skills = [
+                    {n: "Drawing", v: s.drawing}, {n: "Sports", v: s.sports},
+                    {n: "Communication", v: s.communication}, {n: "Leadership", v: s.leadership},
+                    {n: "Self Control", v: s.self_control}, {n: "Neatness", v: s.neatness},
+                    {n: "Punctuality", v: s.punctuality}, {n: "Attitude", v: s.attitude}
+                ];
+                
+                document.getElementById('r_skills').innerHTML = skills.map(sk => 
+                    `<tr><td style="text-align: left;">${sk.n}</td><td>${sk.v || 0}</td></tr>`
+                ).join('');
+
+            } catch (error) {
+                console.error("Result Rendering Error:", error);
+                alert("❌ A script error occurred. Please check the F12 Developer Console.");
+                localStorage.removeItem('studentResult'); 
+            }
+        });
+    </script>
+</body>
+</html>

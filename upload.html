@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Staff Result Upload - Peculiar High School</title>
+    <link rel="stylesheet" href="./styles.css">
+    <style>
+        .id-group { display: flex; gap: 10px; align-items: center; }
+        .id-group input { margin: 0; flex: 1; }
+        .btn-generate {
+            background-color: #D4AF37; color: #333; border: none;
+            padding: 10px 15px; cursor: pointer; border-radius: 4px;
+            font-weight: bold; white-space: nowrap;
+        }
+        .btn-generate:hover { background-color: #bda030; }
+        
+        /* New styling for the file upload box */
+        .file-upload-box {
+            grid-column: span 2;
+            border: 2px dashed var(--PH-purple);
+            padding: 15px;
+            text-align: center;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+    </style>
+</head>
+<body class="page-base page-upload">
+    <div class="container">
+        <h2 class="PH-purple line-condensed" style="border-bottom: 2px solid var(--PH-purple); padding-bottom: 10px;">Staff Result Upload Portal</h2>
+        
+        <div class="skills-grid" style="margin-top: 20px;">
+            <input type="text" id="student_name" placeholder="Student Full Name (e.g. GOODNEWS ONOVROKE)">
+            
+            <div class="id-group">
+                <input type="text" id="student_id" placeholder="Student ID" readonly>
+                <button type="button" class="btn-generate" onclick="generateStudentID()">Generate ID</button>
+            </div>
+            
+            <select id="studentClass">
+                <option value="" disabled selected>Select Class...</option>
+                <option value="JSS 1">JSS 1</option>
+                <option value="JSS 2">JSS 2</option>
+                <option value="JSS 3">JSS 3</option>
+                <option value="SSS 1">SSS 1</option>
+                <option value="SSS 2">SSS 2</option>
+                <option value="SSS 3">SSS 3</option>
+            </select>
+
+            <select id="studentTerm">
+                <option value="" disabled selected>Select Term...</option>
+                <option value="1ST TERM">1ST TERM</option>
+                <option value="2ND TERM">2ND TERM</option>
+                <option value="3RD TERM">3RD TERM</option>
+            </select>
+
+            <div class="file-upload-box">
+                <label for="passport_file" style="font-weight: bold; color: var(--PH-purple); display: block; margin-bottom: 8px;">📷 Upload Student Passport (From Device)</label>
+                <input type="file" id="passport_file" accept="image/png, image/jpeg, image/jpg" style="border: none; padding: 0;">
+            </div>
+        </div>
+
+        <div style="margin-top: 25px; text-align: right;">
+            <button type="button" class="btn-generate" style="margin-bottom: 15px;" onclick="addNewSubject()">+ Add New Subject</button>
+        </div>
+
+        <h3 class="PH-purple line-condensed">Subject Scores</h3>
+        <table id="resultsTable">
+            <thead>
+                <tr><th>Subject</th><th>CA (40)</th><th>Exam (60)</th></tr>
+            </thead>
+            <tbody id="subject-list">
+                </tbody>
+        </table>
+
+        <h3 class="PH-purple line-condensed" style="margin-top: 30px;">Affective Domain (Rate 1-5)</h3>
+        <div class="skills-grid">
+            <input type="number" id="drawing" placeholder="Drawing (1-5)" min="1" max="5">
+            <input type="number" id="sports" placeholder="Sports (1-5)" min="1" max="5">
+            <input type="number" id="communication" placeholder="Communication (1-5)" min="1" max="5">
+            <input type="number" id="leadership" placeholder="Leadership (1-5)" min="1" max="5">
+            <input type="number" id="self_control" placeholder="Self Control (1-5)" min="1" max="5">
+            <input type="number" id="neatness" placeholder="Neatness (1-5)" min="1" max="5">
+            <input type="number" id="punctuality" placeholder="Punctuality (1-5)" min="1" max="5">
+            <input type="number" id="attitude" placeholder="Attitude (1-5)" min="1" max="5">
+        </div>
+
+        <h3 class="PH-purple line-condensed" style="margin-top: 30px;">Staff Remarks</h3>
+        <textarea id="t_comment" placeholder="Class Teacher's Comment..." rows="3"></textarea>
+        <textarea id="p_comment" placeholder="Principal's Comment..." rows="3"></textarea>
+
+        <button type="button" class="btn" id="submitBtn" style="margin-top: 25px; font-size: 18px; padding: 15px;" onclick="uploadData()">SUBMIT RESULT TO DATABASE</button>
+    </div>
+
+    <script>
+    // 1. AUTO-GENERATE STUDENT ID
+    function generateStudentID() {
+        const randomNum = Math.floor(Math.random() * 9000) + 1000;
+        document.getElementById('student_id').value = `PS/2026/${randomNum}`;
+    }
+
+    // 2. DYNAMIC SUBJECT LIST LOGIC
+    let subjects = ['MATHEMATICS', 'ENGLISH', 'PHYSICS', 'CHEMISTRY', 'BIOLOGY'];
+
+    function addNewSubject() {
+        const subName = prompt("Enter the name of the new subject:");
+        if (subName) {
+            const upperSub = subName.toUpperCase().trim();
+            if (!upperSub || subjects.includes(upperSub)) return alert("Invalid or duplicate subject.");
+            subjects.push(upperSub);
+            renderSubjectInputs();
+        }
+    }
+
+    function renderSubjectInputs() {
+        const list = document.getElementById('subject-list');
+        if (!list) return; 
+        list.innerHTML = ''; 
+        subjects.forEach(sub => {
+            list.innerHTML += `
+                <tr>
+                    <td style="font-weight: bold;">${sub}</td>
+                    <td><input type="number" id="${sub}_ca" placeholder="CA (Max 40)"></td>
+                    <td><input type="number" id="${sub}_exam" placeholder="Exam (Max 60)"></td>
+                </tr>`;
+        });
+    }
+
+    renderSubjectInputs();
+
+    // NEW: Function to read the selected file and convert it to Base64 Text
+    function getBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+    }
+
+    // 3. SUBMIT RESULT FUNCTION
+    async function uploadData() {
+        const name = document.getElementById('student_name').value.trim();
+        const id = document.getElementById('student_id').value.trim();
+        const sClass = document.getElementById('studentClass').value;
+        const sTerm = document.getElementById('studentTerm').value;
+        const btn = document.getElementById('submitBtn');
+        const fileInput = document.getElementById('passport_file');
+
+        if (!name || !id || !sClass || !sTerm) {
+            return alert("⚠️ Please fill in the Student Name, ID, Class, and Term before submitting.");
+        }
+
+        btn.innerText = "PROCESSING IMAGE & SUBMITTING...";
+        btn.style.backgroundColor = "#888";
+
+        // Convert the device image to text (Base64) if a file was selected
+        let passportData = "";
+        if (fileInput.files.length > 0) {
+            try {
+                passportData = await getBase64(fileInput.files[0]);
+            } catch (err) {
+                alert("❌ Error processing the passport image. Please try a different photo.");
+                btn.innerText = "SUBMIT RESULT TO DATABASE";
+                btn.style.backgroundColor = "var(--PH-purple)";
+                return;
+            }
+        }
+
+        const payload = {
+            name: name,
+            id: id,
+            class: sClass,
+            term: sTerm,
+            passport: passportData, // Saves the new Base64 text directly to the DB!
+            drawing: document.getElementById('drawing').value || 0,
+            sports: document.getElementById('sports').value || 0,
+            communication: document.getElementById('communication').value || 0,
+            leadership: document.getElementById('leadership').value || 0,
+            self_control: document.getElementById('self_control').value || 0,
+            neatness: document.getElementById('neatness').value || 0,
+            punctuality: document.getElementById('punctuality').value || 0,
+            attitude: document.getElementById('attitude').value || 0,
+            t_comment: document.getElementById('t_comment').value || "Awaiting Remark",
+            p_comment: document.getElementById('p_comment').value || "Awaiting Remark",
+            results: []
+        };
+
+        subjects.forEach(sub => {
+            const caScore = document.getElementById(`${sub}_ca`).value;
+            const examScore = document.getElementById(`${sub}_exam`).value;
+            
+            if(caScore || examScore) {
+                payload.results.push({
+                    subject: sub,
+                    ca: caScore || 0,
+                    exam: examScore || 0
+                });
+            }
+        });
+
+        try {
+            const res = await fetch('http://localhost:3000/api/upload-bulk', {
+                method: 'POST', 
+                headers: {'Content-Type': 'application/json'}, 
+                body: JSON.stringify(payload)
+            });
+            
+            if(res.ok) {
+                alert(`✅ Result submitted successfully for ${name}!`);
+                window.location.reload(); 
+            } else {
+                alert("❌ Server rejected the data. The image file might be too large.");
+            }
+        } catch(e) { 
+            alert("❌ Connection failed. Ensure 'node server.js' is running."); 
+        } finally {
+            btn.innerText = "SUBMIT RESULT TO DATABASE";
+            btn.style.backgroundColor = "var(--PH-purple)";
+        }
+    }
+    </script>
+</body>
+</html>
