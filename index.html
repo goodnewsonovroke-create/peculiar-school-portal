@@ -2,44 +2,61 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Peculiar School</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Login - Peculiar School Portal</title>
+    <link rel="stylesheet" href="./styles.css">
 </head>
-<body>
-    <header>
-        <h1>Peculiar School Portal</h1>
-    </header>
-
-    <main id="login-section" class="main-login-container">
-        <form id="loginForm">
-            <h2>Sign In</h2>
-            <label for="fullName">Full Name</label>
-            <input type="text" id="fullName" placeholder="Enter Student's Full Name" required>
-            
-            <label for="password">Password</label>
-            <input type="password" id="password" placeholder="Password" required>
-            
-            <button type="submit">Login</button>
-            <p id="message"></p>
-            <a href="register.html" style="display:block; text-align:center; margin-top:10px;">New Student? Register Here</a>
-        </form>
-    </main>
-
-    <div id="dashboard" style="display: none; text-align: center; padding: 50px;">
-    <h2>Welcome to the Portal</h2>
-    <div class="portal-buttons">
-        <button class="p-btn" onclick="window.location.href='results.html'">Check Results</button>
-        <button class="p-btn" onclick="window.location.href='upload.html'">Upload Portal</button>
-        <button class="p-btn" onclick="location.reload()" style="background-color: #d9534f;">Logout</button>
+<body class="page-base page-login"> <div class="container" style="max-width: 450px; text-align: center;">
+        <img src="./school-logo.png.jpg" alt="Logo" width="120">
+        <h2 class="PH-purple line-condensed">STUDENT RESULT PORTAL</h2>
+        <p class="PH-subtext line-condensed">Check your academic performance securely.</p>
+        
+        <input type="text" id="student_name" placeholder="FULL NAME (e.g. GOODNEWS ONAVROKE)">
+        <input type="text" id="student_id" placeholder="STUDENT ID (e.g. PS/2026/001)">
+        
+        <button class="btn" onclick="checkResult()">SEARCH RESULT</button>
+        
+        <p style="margin-top: 20px;"><a href="dashboard.html" style="color: #4b1c8d;">Staff Member? Access Portal</a></p>
     </div>
-</div>
 
-    <footer>
-        <p>&copy; 2025 Peculiar School - Okpanam, Delta State</p>
-        <span class="motto">"Study to show yourself approved"</span>
-    </footer>
+    <script>
+   async function checkResult() {
+    const name = document.getElementById('student_name').value.trim();
+    const id = document.getElementById('student_id').value.trim();
+    const btn = document.querySelector('.btn'); // Targets your search button
+    
+    if(!name || !id) return alert("Please enter both Name and ID.");
 
-    <script src="app.js"></script>
+    // Change button text to show it's working
+    btn.innerText = "SEARCHING...";
+    btn.style.opacity = "0.7";
+
+    try {
+        const res = await fetch(`http://localhost:3000/api/check-result?name=${name}&id=${id}`);
+        
+        // If the server says "404 Not Found" or is offline
+        if (!res.ok) {
+            throw new Error("Student not found or Server is offline.");
+        }
+        
+        const data = await res.json();
+        
+        // STRICT CHECK: Only redirect if we have real data from the database
+        if (Array.isArray(data) && data.length > 0) {
+            localStorage.setItem('studentResult', JSON.stringify(data));
+            window.location.href = 'results.html'; // Safe to redirect now!
+        } else {
+            throw new Error("No grades found for this student.");
+        }
+        
+    } catch (err) { 
+        // This stops the redirect and tells you exactly what went wrong
+        alert("❌ " + err.message + "\n\nEnsure 'node server.js' is running in VS Code.");
+        
+        // Reset the button so you can try again
+        btn.innerText = "SEARCH RESULT"; 
+        btn.style.opacity = "1";
+    }
+}
+    </script>
 </body>
 </html>

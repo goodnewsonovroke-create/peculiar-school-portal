@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Staff Dashboard - Peculiar Schools</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .dash-container { max-width: 1000px; margin: 30px auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #4b1c8d; color: white; }
+        .id-badge { background: #fbeaea; color: #9b1b21; padding: 4px 8px; border-radius: 4px; font-weight: bold; }
+        .btn-view { background: #4b1c8d; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="dash-container">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 2px solid #4b1c8d; padding-bottom:10px;">
+            <h2>STUDENT RESULT MANAGEMENT</h2>
+            <a href="upload.html" style="color: #4b1c8d; font-weight: bold;">+ Upload New Result</a>
+        </div>
+        
+        <table id="studentTable">
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Class</th>
+                    <th>Generated ID</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="dashBody">
+                </tbody>
+        </table>
+    </div>
+
+   <script>
+    async function loadDashboard() {
+        const res = await fetch('/api/all-students');
+        const students = await res.json();
+        const body = document.getElementById('dashBody');
+        body.innerHTML = "";
+
+        students.forEach(s => {
+            body.innerHTML += `
+                <tr>
+                    <td><b>${s.student_name}</b></td>
+                    <td>${s.student_class}</td>
+                    <td><span class="id-badge">${s.student_id}</span></td>
+                    <td>
+                        <button onclick="viewResult('${s.student_name}', '${s.student_id}')" class="btn-view">View</button>
+                        <button onclick="deleteStudent('${s.student_id}', '${s.student_name}')" 
+                                style="background:#d01d1d; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; margin-left:10px;">
+                            Delete
+                        </button>
+                    </td>
+                </tr>`;
+        });
+    }
+
+    async function deleteStudent(id, name) {
+        if (confirm(`Are you sure you want to delete all records for ${name}?`)) {
+            const res = await fetch(`/api/delete-student/${id}`, { method: 'DELETE' });
+            if (res.ok) {
+                alert("Student removed successfully");
+                loadDashboard(); // Refresh the list
+            }
+        }
+    }
+    window.onload = loadDashboard;
+</script>
+</body>
+<div style="background:bg-upload.jpg #fff3cd17; border: 1px solid #ffeeba; padding: 15px; text-align: center; font-family: sans-serif;">
+    <p style="margin: 0; color: #856404;">
+        <strong>Notice:</strong> You are on the <b>Free Plan</b>. Limit: 10 Students.
+        <a href="YOUR_PAYMENT_LINK_HERE" style="background: #28a745; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px; margin-left: 15px; font-weight: bold;">
+            🚀 UPGRADE TO PRO
+        </a>
+    </p>
+</div>
+<script>
+    // This function runs as soon as the page loads
+    window.onload = function() {
+        const password = prompt("Enter Staff Password:");
+        if (password === "peculiar2026") {
+            alert("Access Granted! Welcome to the Peculiar Portal.");
+        } else {
+            alert("Incorrect Staff Credentials. Returning to login.");
+            window.location.href = 'index.html'; 
+        }
+    };
+</script>

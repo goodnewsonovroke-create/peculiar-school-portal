@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Enrollment - Peculiar School</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Peculiar School Portal</h1>
+    </header>
+    <main class="login-container">
+        <form id="registerForm">
+            <h2>Student Enrollment</h2>
+            <input type="text" id="regFullName" placeholder="Full Name (e.g. John Doe)" required>
+            <input type="email" id="regEmail" placeholder="Email Address" required>
+            <input type="password" id="regPassword" placeholder="Create Password" required>
+            <button type="submit">Register Student</button>
+            <p id="regMessage"></p>
+            <a href="index.html" style="display:block; text-align:center; margin-top:10px; color:#2D1B7B;">Back to Login</a>
+        </form>
+    </main>
+<script>
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fullName = document.getElementById('regFullName').value;
+        const email = document.getElementById('regEmail').value;
+        const password = document.getElementById('regPassword').value;
+
+        try {
+            // Make sure the URL matches the route we just added
+const response = await fetch('/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ fullName, email, password })
+});
+            const data = await response.json();
+            const msg = document.getElementById('regMessage');
+            msg.innerText = data.message || data.error;
+            msg.style.color = response.ok ? "green" : "red";
+        } catch (err) {
+            document.getElementById('regMessage').innerText = "Server connection failed.";
+        }
+    });
+</script>

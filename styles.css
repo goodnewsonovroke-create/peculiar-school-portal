@@ -1,122 +1,118 @@
-/* General Styles */
+/* --- Global Peculiar School Styles --- */
+:root {
+    --PH-purple: #4b1c8d; /* Peculiar Purple */
+    --PH-subtext: #D4AF37; /* Metallic Gold */
+    --PH-address: #333; /* Dark Gray for readability */
+    --background-gray: url(bg.jpg)
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f4f9;
     margin: 0;
-    display: flex;
-    flex-direction: column;
+    padding: 0;
+    background-color: var(--background-gray);
+    color: #333;
+}
+
+/* Base handling for full-screen background images */
+.page-base {
     min-height: 100vh;
-}
-
-/* Header Styling */
-header {
-    background-color: #2D1B7B; /* Primary Purple */
-    color: white;
-    padding: 2rem;
-    text-align: center;
-    border-bottom: 5px solid #D32F2F; /* Accent Red */
-}
-
-header h1 {
-    margin: 0;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-}
-
-/* Login Container */
-.login-container {
-    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
-}
-
-#loginForm {
-    background: white;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    /* 1. Guarantees the background fits the page perfectly without repeating */
+.page-base {
+    min-height: 100vh;
     width: 100%;
-    max-width: 400px;
-    border-top: 8px solid #00AEEF; /* Sky Blue Accent */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: cover; /* Forces image to scale and fit the screen */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Keeps image still if the page scrolls */
 }
 
-#loginForm h2 {
-    color: #2D1B7B;
-    text-align: center;
-    margin-bottom: 25px;
+/* 2. NEW: Pins the buttons to the top corners */
+.top-nav {
+    position: absolute; /* Breaks it out of the center alignment */
+    top: 20px;
+    left: 30px;
+    right: 30px;
+    display: flex;
+    justify-content: space-between; /* Pushes one to the left, one to the right */
+    z-index: 1000; /* Keeps buttons above the background */
+}
 }
 
-/* Input Fields */
-input {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    box-sizing: border-box; /* Ensures padding doesn't affect width */
+/* --- Unique Page Background Images --- */
+/* Update these lines in your styles.css */
+.page-login { 
+    background-image: linear-gradient(rgba(244, 244, 249, 0.4), rgba(244, 244, 249, 0.18)), url('./bg-login.jpg'); 
+} 
+.page-upload { 
+    background-image: linear-gradient(rgba(244, 244, 249, 0.85), rgba(244, 244, 249, 0.85)), url('./bg-upload.jpg'); 
+}
+.page-dashboard { 
+    background-image: linear-gradient(rgba(244, 244, 249, 0.85), rgba(244, 244, 249, 0.85)), url('./bg-dashboard.jpg'); 
+}
+/* Condensed spacing to fix the "too much" line-height issue */
+.line-condensed { line-height: 1.2 !important; margin: 5px 0 !important; }
+
+/* colored header text elements */
+.PH-purple { color: var(--PH-purple); }
+.PH-subtext { color: var(--PH-subtext); }
+.PH-address { color: var(--PH-address); }
+
+/* Main Container */
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    background: rgba(255, 255, 255, 0.07); /* Semi-transparent to view background */
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-input:focus {
-    outline: none;
-    border-color: #2D1B7B;
-}
-
-/* Button Styling */
-button {
-    width: 100%;
-    padding: 12px;
-    background-color: #2D1B7B;
+.btn {
+    background-color: var(--PH-purple);
     color: white;
     border: none;
-    border-radius: 6px;
-    font-weight: bold;
+    padding: 12px 20px;
     cursor: pointer;
-    transition: background 0.3s ease;
-    margin-top: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
 }
 
-button:hover {
-    background-color: #D32F2F; /* Changes to Red on hover */
+.btn:hover { background-color: #3a156e; }
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
 }
 
-/* Footer & Motto */
-footer {
-    background-color: #2D1B7B;
-    color: white;
-    text-align: center;
-    padding: 15px;
-    font-size: 0.9rem;
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
 }
 
-/* Motto styling based on logo ribbon */
-.motto {
-    font-style: italic;
-    color: #F8BBD0; /* Soft Pink from the book */
-    display: block;
-    margin-top: 5px;
-}
+table, th, td { border: 1px solid #ddd; }
+/* Reduced table cell padding to fix excessive spacing */
+th, td { padding: 8px; text-align: center; }
+th { background-color: var(--PH-purple); color: white; }
+
 @media print {
-    /* Hide everything except the result box when printing */
-    body * { visibility: hidden; }
-    #resultBox, #resultBox * { visibility: visible; }
-    #resultBox {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        border: none;
-    }
-    button, a { display: none !important; } /* Hide buttons on the paper */
-}@media print {
-    body * { visibility: hidden; }
-    #resultBox, #resultBox * { visibility: visible; }
-    #resultBox { position: absolute; left: 0; top: 0; width: 100%; border: none; }
-    .print-btn, a, button { display: none !important; }
-}@media print {
-    body * { visibility: hidden; }
-    #resultBox, #resultBox * { visibility: visible; }
-    #resultBox { position: absolute; left: 0; top: 0; width: 100%; border: none; }
-    .print-hide, a, button { display: none !important; }
+    .no-print { display: none; }
+    body { background: white; padding: 0; }
+    .container { box-shadow: none; border: 2px solid black; background: white;}
 }
