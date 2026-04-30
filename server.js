@@ -17,11 +17,12 @@ app.use(express.static(__dirname)); // Serves your HTML/CSS files
 // 3. DATABASE CONNECTION
 // ==========================================
 // This uses Render environment variables automatically when live!
-const db = mysql.createPool({
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASS || '',
-    database: process.env.DB_NAME || 'peculiar_db'
+const db = mysql.createConnection({
+    host: 'mysql-1cd8eef8-peculiar-portal-01.h.aivencloud.com',
+    port: '12174',
+    user: 'avnadmin',
+    password: process.env.DB_PASSWORD, // THIS IS THE SECRET VAULT!
+    database: 'defaultdb' 
 });
 
 // ==========================================
