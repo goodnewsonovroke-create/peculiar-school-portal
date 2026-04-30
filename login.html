@@ -8,9 +8,6 @@
 </head>
 <body class="portal-bg"> 
 
-    <!-- ========================================== -->
-    <!-- 1. STUDENT RESULT PORTAL -->
-    <!-- ========================================== -->
     <div id="studentContainer" class="portal-container translucent-overlay">
         <img src="school-logo.png.jpg" alt="Peculiar High School Logo">
         <h2>STUDENT RESULT PORTAL</h2>
@@ -19,50 +16,17 @@
         <input type="text" id="studentName" placeholder="ENTER FULL NAME" required>
         <input type="text" id="studentId" placeholder="ENTER ID (e.g., PS/2026/5191)" required>
         
-        <button id="searchBtn" onclick="checkResult()">SEARCH RESULT</button>
-        <p id="studentError" class="error-text" style="color: red; display: none;"></p>
+        <!-- Beautiful, Professional Purple Button -->
+        <button id="searchBtn" onclick="checkResult()" style="background-color: #4a00e0; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px; margin-bottom: 15px; font-size: 16px;">SEARCH RESULT</button>
         
-        <br>
-       <a href="#" onclick="toggleStaffPortal(true); return false;" class="portal-link">Staff Member? Access Portal</a>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- 2. STAFF PORTAL -->
-    <!-- ========================================== -->
-    <div id="staffContainer" class="portal-container translucent-overlay" style="display: none;">
-        <img src="school-logo.png.jpg" alt="Peculiar High School Logo">
-        <h2 style="margin-top: 5px;">STAFF PORTAL</h2>
-        <p style="color: #FFD700; font-size: 14px; margin-top: -10px;">Authorized Personnel Only</p>
-
-        <input type="text" id="staffId" placeholder="Staff ID (e.g., Admin)" required>
-        <input type="password" id="staffPassword" placeholder="Password" required>
+        <p id="studentError" class="error-text" style="color: #ff4d4d; display: none; font-weight: bold;"></p>
         
-        <button id="staffLoginBtn" onclick="loginStaff()">LOGIN TO DASHBOARD</button>
-        <p id="staffError" class="error-text" style="color: red; display: none;"></p>
-        
-        <br>
-        <a href="#" onclick="toggleStaffPortal(false); return false;" class="portal-link">Back to Student Search</a>
+        <!-- Direct instantly to upload.html, no passwords, no toggles -->
+        <a href="upload.html" class="portal-link" style="color: #FFD700; text-decoration: none; font-weight: bold; font-size: 14px;">Staff Member? Access Portal</a>
     </div>
 
     <script>
-        // TOGGLE VIEWS
-        function toggleStaffPortal(showStaff) {
-            const studentBox = document.getElementById('studentContainer');
-            const staffBox = document.getElementById('staffContainer');
-            
-            document.getElementById('studentError').style.display = 'none';
-            document.getElementById('staffError').style.display = 'none';
-
-            if (showStaff) {
-                studentBox.style.display = 'none';
-                staffBox.style.display = 'block';
-            } else {
-                studentBox.style.display = 'block';
-                staffBox.style.display = 'none';
-            }
-        }
-
-        // STUDENT LOGIN LOGIC
+        // STUDENT LOGIN LOGIC ONLY
         async function checkResult() {
             const name = document.getElementById('studentName').value;
             const id = document.getElementById('studentId').value;
@@ -76,6 +40,7 @@
             }
 
             btn.innerText = "LOADING...";
+            btn.style.backgroundColor = "#666"; // Turns gray while searching
             errorText.style.display = "none";
 
             try {
@@ -95,38 +60,9 @@
                 errorText.style.display = "block";
             } finally {
                 btn.innerText = "SEARCH RESULT";
+                btn.style.backgroundColor = "#4a00e0"; // Turns purple again
             }
         }
-
-     // STAFF LOGIN LOGIC (WITH UPLOAD REDIRECT)
-        function loginStaff() {
-            const staffId = document.getElementById('staffId').value;
-            const password = document.getElementById('staffPassword').value;
-            const errorText = document.getElementById('staffError');
-            const btn = document.getElementById('staffLoginBtn');
-
-            if (!staffId || !password) {
-                errorText.innerText = "Please fill in all fields.";
-                errorText.style.display = "block";
-                return;
-            }
-
-            btn.innerText = "AUTHENTICATING...";
-            errorText.style.display = "none";
-
-            // QUICK BYPASS: Converts whatever you type to lowercase and removes spaces!
-            setTimeout(() => {
-                const cleanId = staffId.trim().toLowerCase(); 
-                
-                if (cleanId === "admin") { 
-                    // ✨ THIS IS THE FIX: It now sends you straight to upload.html ✨
-                    window.location.href = 'upload.html'; 
-                } else {
-                    errorText.innerText = "Invalid Staff ID.";
-                    errorText.style.display = "block";
-                    btn.innerText = "LOGIN TO DASHBOARD";
-                }
-            }, 800);
-        }
+    </script>
 </body>
 </html>
