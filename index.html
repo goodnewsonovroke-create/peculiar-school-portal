@@ -31,8 +31,7 @@
     btn.style.opacity = "0.7";
 
     try {
-        const res = await fetch(`http://localhost:3000/api/check-result?name=${name}&id=${id}`);
-        
+                
         // If the server says "404 Not Found" or is offline
         if (!res.ok) {
             throw new Error("Student not found or Server is offline.");
