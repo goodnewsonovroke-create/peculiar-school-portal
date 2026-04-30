@@ -114,7 +114,7 @@ th { background-color: var(--PH-purple); color: white; }
 @media print {
     .no-print { display: none; }
     body { background: white; padding: 0; }
-    .container { box-shadow: none; border: 2px solid black; background: white;}
+    .container { box-shadow: none; border: 2px solid black; background: ;}(bg-login.jpg)
 }/* Styling to match the look of image_15.png */
 .translucent-overlay {
     background: rgba(0, 0, 0, 0.7); /* Deep dark background with 70% transparency */
