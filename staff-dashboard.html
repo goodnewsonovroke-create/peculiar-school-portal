@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peculiar School Portal - Staff Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .dashboard-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .dash-btn {
+            background-color: #4a00e0;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        .dash-btn:hover {
+            background-color: #320099;
+        }
+    </style>
+</head>
+<body class="portal-bg"> 
+
+    <div class="portal-container translucent-overlay">
+        <img src="school-logo.png" alt="Peculiar High School Logo">
+        <h2>STAFF CONTROL ROOM</h2>
+        <p style="color: #FFD700; margin-top: -10px;">Welcome, Authorized Personnel.</p>
+
+        <div class="dashboard-menu">
+            <!-- These are the links to your other pages! -->
+            <a href="upload.html" class="dash-btn">📤 Upload Student Results</a>
+            <a href="analytics.html" class="dash-btn">📊 View Portal Analytics</a>
+            <a href="verified.html" class="dash-btn">✅ Verified Student Results</a>
+        </div>
+
+        <br>
+        <a href="login.html" class="portal-link" style="color: #ff4d4d;">Log Out</a>
+    </div>
+
+</body>
+</html>

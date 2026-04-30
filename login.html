@@ -8,6 +8,9 @@
 </head>
 <body class="portal-bg"> 
 
+    <!-- ========================================== -->
+    <!-- 1. STUDENT RESULT PORTAL -->
+    <!-- ========================================== -->
     <div id="studentContainer" class="portal-container translucent-overlay">
         <img src="school-logo.png.jpg" alt="Peculiar High School Logo">
         <h2>STUDENT RESULT PORTAL</h2>
@@ -16,17 +19,53 @@
         <input type="text" id="studentName" placeholder="ENTER FULL NAME" required>
         <input type="text" id="studentId" placeholder="ENTER ID (e.g., PS/2026/5191)" required>
         
-        <!-- Beautiful, Professional Purple Button -->
         <button id="searchBtn" onclick="checkResult()" style="background-color: #4a00e0; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px; margin-bottom: 15px; font-size: 16px;">SEARCH RESULT</button>
-        
         <p id="studentError" class="error-text" style="color: #ff4d4d; display: none; font-weight: bold;"></p>
         
-        <!-- Direct instantly to upload.html, no passwords, no toggles -->
-        <a href="upload.html" class="portal-link" style="color: #FFD700; text-decoration: none; font-weight: bold; font-size: 14px;">Staff Member? Access Portal</a>
+        <br>
+        <a href="#" onclick="toggleStaffPortal(true); return false;" class="portal-link" style="color: #FFD700; text-decoration: none; font-weight: bold; font-size: 14px;">Staff Member? Access Portal</a>
     </div>
 
+    <!-- ========================================== -->
+    <!-- 2. STAFF PORTAL LOGIN -->
+    <!-- ========================================== -->
+    <div id="staffContainer" class="portal-container translucent-overlay" style="display: none;">
+        <img src="school-logo.png.jpg" alt="Peculiar High School Logo">
+        <h2 style="margin-top: 5px;">STAFF PORTAL</h2>
+        <p style="color: #FFD700; font-size: 14px; margin-top: -10px;">Authorized Personnel Only</p>
+
+        <input type="text" id="staffId" placeholder="Staff ID (e.g., Admin)" required>
+        <input type="password" id="staffPassword" placeholder="Password" required>
+        
+        <button id="staffLoginBtn" onclick="loginStaff()" style="background-color: #4a00e0; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px; margin-bottom: 15px; font-size: 16px;">LOGIN TO DASHBOARD</button>
+        <p id="staffError" class="error-text" style="color: #ff4d4d; display: none; font-weight: bold;"></p>
+        
+        <br>
+        <a href="#" onclick="toggleStaffPortal(false); return false;" class="portal-link" style="color: #FFD700; text-decoration: none; font-weight: bold; font-size: 14px;">Back to Student Search</a>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- THE MISSING SCRIPT IS RIGHT HERE!          -->
+    <!-- ========================================== -->
     <script>
-        // STUDENT LOGIN LOGIC ONLY
+        // Toggle between Student and Staff views without refreshing
+        function toggleStaffPortal(showStaff) {
+            const studentBox = document.getElementById('studentContainer');
+            const staffBox = document.getElementById('staffContainer');
+            
+            document.getElementById('studentError').style.display = 'none';
+            document.getElementById('staffError').style.display = 'none';
+
+            if (showStaff) {
+                studentBox.style.display = 'none';
+                staffBox.style.display = 'block';
+            } else {
+                studentBox.style.display = 'block';
+                staffBox.style.display = 'none';
+            }
+        }
+
+        // Student Database Check
         async function checkResult() {
             const name = document.getElementById('studentName').value;
             const id = document.getElementById('studentId').value;
@@ -40,7 +79,7 @@
             }
 
             btn.innerText = "LOADING...";
-            btn.style.backgroundColor = "#666"; // Turns gray while searching
+            btn.style.backgroundColor = "#666";
             errorText.style.display = "none";
 
             try {
@@ -60,8 +99,40 @@
                 errorText.style.display = "block";
             } finally {
                 btn.innerText = "SEARCH RESULT";
-                btn.style.backgroundColor = "#4a00e0"; // Turns purple again
+                btn.style.backgroundColor = "#4a00e0";
             }
+        }
+
+        // Staff Login (Redirects to the new Control Room!)
+        function loginStaff() {
+            const staffId = document.getElementById('staffId').value;
+            const password = document.getElementById('staffPassword').value;
+            const errorText = document.getElementById('staffError');
+            const btn = document.getElementById('staffLoginBtn');
+
+            if (!staffId || !password) {
+                errorText.innerText = "Please fill in all fields.";
+                errorText.style.display = "block";
+                return;
+            }
+
+            btn.innerText = "AUTHENTICATING...";
+            btn.style.backgroundColor = "#666";
+            errorText.style.display = "none";
+
+            setTimeout(() => {
+                const cleanId = staffId.trim().toLowerCase(); 
+                
+                if (cleanId === "admin") { 
+                    // This sends them straight to the new staff dashboard!
+                    window.location.href = 'staff-dashboard.html'; 
+                } else {
+                    errorText.innerText = "Invalid Staff ID.";
+                    errorText.style.display = "block";
+                    btn.innerText = "LOGIN TO DASHBOARD";
+                    btn.style.backgroundColor = "#4a00e0";
+                }
+            }, 800);
         }
     </script>
 </body>
