@@ -21,14 +21,13 @@
         <p id="errorMessage" style="color: red; display: none;"></p>
     </div>
 
-    <script>
+   <script>
         async function checkResult() {
             const name = document.getElementById('studentName').value;
             const id = document.getElementById('studentId').value;
             const errorText = document.getElementById('errorMessage');
             const btn = document.getElementById('searchBtn');
 
-            // Basic validation
             if (!name || !id) {
                 errorText.innerText = "Please fill in all fields.";
                 errorText.style.display = "block";
@@ -39,30 +38,22 @@
             errorText.style.display = "none";
 
             try {
-                // ✅ CLEAN SHEET RULE: Relative path only. NO localhost!
                 const response = await fetch(`/api/check-result?name=${encodeURIComponent(name)}&id=${encodeURIComponent(id)}`);
                 const data = await response.json();
 
                 if (response.ok) {
-                    // Success! Redirect to results page and pass the data
                     localStorage.setItem('studentData', JSON.stringify(data));
                     window.location.href = 'results.html'; 
                 } else {
-                    // Server returned an error (like "Student not found")
-                    errorText.innerText = data.error || "Login failed.";
+                    errorText.innerText = data.error || "Student not found.";
                     errorText.style.display = "block";
                 }
             } catch (err) {
-        console.error("Fetch error:", err);
-        const errorText = document.getElementById('errorMessage');
-        errorText.innerText = "Network error. Unable to connect to the portal.";
-        errorText.style.display = "block";
-        
-        // OR, if you are using an alert, just make it this:
-        // alert("Network error: Could not reach the server.");
-    
+                console.error("Fetch error:", err);
+                errorText.innerText = "Network error. Unable to connect to the portal.";
+                errorText.style.display = "block";
             } finally {
-                btn.innerText = "SEARCHING...";
+                btn.innerText = "SEARCH RESULT";
             }
         }
     </script>
