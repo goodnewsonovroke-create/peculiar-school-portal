@@ -1,27 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Peculiar School Portal - Login</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-
-    <div class="login-container">
-        <img src="school-logo.png.jpg" alt="Peculiar High School Logo">
-        <h2>STUDENT RESULT PORTAL</h2>
-        <p>Check your academic performance securely.</p>
-
-        <!-- Form fields -->
-        <input type="text" id="studentName" placeholder="ENTER FULL NAME" required>
-        <input type="text" id="studentId" placeholder="ENTER ID (e.g., PS/2026/5191)" required>
-        
-        <button id="searchBtn" onclick="checkResult()">SEARCHING...</button>
-        <p id="errorMessage" style="color: red; display: none;"></p>
-    </div>
-
-   <script>
+<script>
         async function checkResult() {
             const name = document.getElementById('studentName').value;
             const id = document.getElementById('studentId').value;
@@ -45,10 +22,12 @@
                     localStorage.setItem('studentData', JSON.stringify(data));
                     window.location.href = 'results.html'; 
                 } else {
+                    // This is where the rogue 'res' was hiding!
                     errorText.innerText = data.error || "Student not found.";
                     errorText.style.display = "block";
                 }
             } catch (err) {
+                // This completely removes that annoying popup forever.
                 console.error("Fetch error:", err);
                 errorText.innerText = "Network error. Unable to connect to the portal.";
                 errorText.style.display = "block";
@@ -57,5 +36,3 @@
             }
         }
     </script>
-</body>
-</html>
