@@ -53,10 +53,14 @@
                     errorText.style.display = "block";
                 }
             } catch (err) {
-                // Network error (Server is down or unreachable)
-                console.error("Fetch error:", err);
-                errorText.innerText = "Network error. Unable to connect to the portal.";
-                errorText.style.display = "block";
+        console.error("Fetch error:", err);
+        const errorText = document.getElementById('errorMessage');
+        errorText.innerText = "Network error. Unable to connect to the portal.";
+        errorText.style.display = "block";
+        
+        // OR, if you are using an alert, just make it this:
+        // alert("Network error: Could not reach the server.");
+    
             } finally {
                 btn.innerText = "SEARCHING...";
             }
