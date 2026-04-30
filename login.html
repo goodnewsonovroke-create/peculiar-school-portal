@@ -4,12 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Peculiar School Portal - Login</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css"> 
 </head>
-<body>
-
-    <div class="login-container">
-        <img src="school-logo.png.jpg" alt="Peculiar High School Logo">
+<body class="portal-bg"> <div id="studentContainer" class="portal-container translucent-overlay">
+        <img src="school-logo.png" alt="Peculiar High School Logo">
         <h2>STUDENT RESULT PORTAL</h2>
         <p>Check your academic performance securely.</p>
 
@@ -17,23 +15,51 @@
         <input type="text" id="studentId" placeholder="ENTER ID (e.g., PS/2026/5191)" required>
         
         <button id="searchBtn" onclick="checkResult()">SEARCH RESULT</button>
-        <p id="errorMessage" style="color: red; display: none;"></p>
-    </div>
-    <button id="searchBtn" onclick="checkResult()">SEARCH RESULT</button>
-        <p id="errorMessage" style="color: red; display: none;"></p>
+        <p id="studentError" class="error-text" style="display: none;"></p>
         
-        <!-- Add this missing link right here! -->
         <br>
-        <a href="dashboard.html" style="text-decoration: underline; color: #4a00e0; font-size: 14px;">Staff Member? Access Portal</a>
+        <a href="#" onclick="toggleStaffPortal(true)" class="portal-link">Staff Member? Access Portal</a>
+    </div>
+
+    <div id="staffContainer" class="portal-container translucent-overlay" style="display: none;">
+        <img src="school-logo.png" alt="Peculiar High School Logo">
+        <h2 style="margin-top: 5px;">STAFF PORTAL</h2>
+        <p style="color: #FFD700; font-size: 14px; margin-top: -10px;">Authorized Personnel Only</p>
+
+        <input type="text" id="staffId" placeholder="Staff ID (e.g., Admin)" required>
+        <input type="password" id="staffPassword" placeholder="Password" required>
+        
+        <button id="staffLoginBtn" onclick="loginStaff()">LOGIN TO DASHBOARD</button>
+        <p id="staffError" class="error-text" style="display: none;"></p>
+        
+        <br>
+        <a href="#" onclick="toggleStaffPortal(false)" class="portal-link">Back to Student Search</a>
     </div>
 
     <script>
+        // FUNCTION: Toggle between Student and Staff views
+        function toggleStaffPortal(showStaff) {
+            const studentBox = document.getElementById('studentContainer');
+            const staffBox = document.getElementById('staffContainer');
+            const errorTexts = document.querySelectorAll('.error-text');
+            
+            // Hide all errors
+            errorTexts.forEach(t => t.style.display = 'none');
 
-    <script>
+            if (showStaff) {
+                studentBox.style.display = 'none';
+                staffBox.style.display = 'block';
+            } else {
+                studentBox.style.display = 'block';
+                staffBox.style.display = 'none';
+            }
+        }
+
+        // --- STUDENT: Check Result Logic (Clean & Working) ---
         async function checkResult() {
             const name = document.getElementById('studentName').value;
             const id = document.getElementById('studentId').value;
-            const errorText = document.getElementById('errorMessage');
+            const errorText = document.getElementById('studentError');
             const btn = document.getElementById('searchBtn');
 
             if (!name || !id) {
@@ -46,7 +72,7 @@
             errorText.style.display = "none";
 
             try {
-                // Guaranteed correct Render URL fetch
+                // Guaranteed relative path "fit to path"
                 const response = await fetch(`/api/check-result?name=${encodeURIComponent(name)}&id=${encodeURIComponent(id)}`);
                 const data = await response.json();
 
@@ -63,6 +89,50 @@
                 errorText.style.display = "block";
             } finally {
                 btn.innerText = "SEARCH RESULT";
+            }
+        }
+
+        // --- STAFF: Login Logic (AESTHETIC & STRUCTURAL ONLY - No backend connected) ---
+        async function loginStaff() {
+            const staffId = document.getElementById('staffId').value;
+            const password = document.getElementById('staffPassword').value;
+            const errorText = document.getElementById('staffError');
+            const btn = document.getElementById('staffLoginBtn');
+
+            if (!staffId || !password) {
+                errorText.innerText = "Please fill in all fields.";
+                errorText.style.display = "block";
+                return;
+            }
+
+            btn.innerText = "AUTHENTICATING...";
+            errorText.style.display = "none";
+
+            try {
+                // Placeholder fetch: structured perfectly but will fail as endpoint doesn't exist
+                const response = await fetch(`/api/login-staff`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ staffId, password })
+                });
+
+                // This logic is structured, but you haven't created the backend for this yet!
+                const data = await response.json();
+                
+                if (response.ok) {
+                    alert("Staff Login Successful!"); // In future, will redirect to dashboard
+                } else {
+                    errorText.innerText = data.error || "Staff login failed.";
+                    errorText.style.display = "block";
+                }
+
+            } catch (err) {
+                // Fallback since the backend route is missing
+                console.error("Staff Login Error:", err);
+                errorText.innerText = "Staff Login endpoint not yet active in server.js.";
+                errorText.style.display = "block";
+            } finally {
+                btn.innerText = "LOGIN TO DASHBOARD";
             }
         }
     </script>

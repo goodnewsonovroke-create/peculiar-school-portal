@@ -115,4 +115,21 @@ th { background-color: var(--PH-purple); color: white; }
     .no-print { display: none; }
     body { background: white; padding: 0; }
     .container { box-shadow: none; border: 2px solid black; background: white;}
+}/* Styling to match the look of image_15.png */
+.translucent-overlay {
+    background: rgba(0, 0, 0, 0.7); /* Deep dark background with 70% transparency */
+    color: white; /* Make all main text white */
+    border-radius: 15px; /* Rounded corners */
+    padding: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Soft shadow for depth */
+}
+
+.translucent-overlay h2 {
+    color: white !important; /* Ensure H2 is explicitly white */
+}
+
+.portal-link {
+    text-decoration: underline;
+    color: #4a00e0;
+    font-size: 14px;
 }
