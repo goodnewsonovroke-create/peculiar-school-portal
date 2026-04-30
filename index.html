@@ -5,7 +5,8 @@
     <title>Login - Peculiar School Portal</title>
     <link rel="stylesheet" href="./styles.css">
 </head>
-<body class="page-base page-login"> <div class="container" style="max-width: 450px; text-align: center;">
+<body class="page-base page-login"> 
+    <div class="container" style="max-width: 450px; text-align: center;">
         <img src="./school-logo.png.jpg" alt="Logo" width="120">
         <h2 class="PH-purple line-condensed">STUDENT RESULT PORTAL</h2>
         <p class="PH-subtext line-condensed">Check your academic performance securely.</p>
@@ -19,43 +20,49 @@
     </div>
 
     <script>
-   async function checkResult() {
-    const name = document.getElementById('student_name').value.trim();
-    const id = document.getElementById('student_id').value.trim();
-    const btn = document.querySelector('.btn'); // Targets your search button
-    
-    if(!name || !id) return alert("Please enter both Name and ID.");
-
-    // Change button text to show it's working
-    btn.innerText = "SEARCHING...";
-    btn.style.opacity = "0.7";
-
-    try {
-                
-        // If the server says "404 Not Found" or is offline
-        if (!res.ok) {
-            throw new Error("Student not found or Server is offline.");
+    async function checkResult() {
+        const name = document.getElementById('student_name').value.trim();
+        const id = document.getElementById('student_id').value.trim();
+        const btn = document.querySelector('.btn'); // Targets your search button
+        
+        if(!name || !id) {
+            return alert("Please enter both Name and ID.");
         }
-        
-        const data = await res.json();
-        
-        // STRICT CHECK: Only redirect if we have real data from the database
-        if (Array.isArray(data) && data.length > 0) {
-            localStorage.setItem('studentResult', JSON.stringify(data));
-            window.location.href = 'results.html'; // Safe to redirect now!
-        } else {
-            throw new Error("No grades found for this student.");
+
+        // Change button text to show it's working
+        btn.innerText = "SEARCHING...";
+        btn.style.opacity = "0.7";
+
+        try {
+            // REPAIRED: The missing fetch command is back!
+            const response = await fetch(`/api/check-result?name=${encodeURIComponent(name)}&id=${encodeURIComponent(id)}`);
+            
+            // If the server says "404 Not Found" or is offline
+            if (!response.ok) {
+                alert("Student not found. Please check the Name and ID.");
+                return; // Stop the script here if there's an error
+            }
+            
+            const data = await response.json();
+            
+            // STRICT CHECK: Only redirect if we have real data from the database
+            if (Array.isArray(data) && data.length > 0) {
+                localStorage.setItem('studentResult', JSON.stringify(data));
+                window.location.href = 'results.html'; // Safe to redirect now!
+            } else {
+                alert("No grades found for this student.");
+            }
+            
+        } catch (err) {
+            // REPAIRED: The missing catch block is fully restored!
+            console.error("Fetch error:", err);
+            alert("Network error: Unable to connect to the portal.");
+        } finally {
+            // Reset the button so you can try again
+            btn.innerText = "SEARCH RESULT"; 
+            btn.style.opacity = "1";
         }
-        
-    } catch (err) { 
-        // This stops the redirect and tells you exactly what went wrong
-        alert("❌ " + err.message + "\n\nEnsure 'node server.js' is running in VS Code.");
-        
-        // Reset the button so you can try again
-        btn.innerText = "SEARCH RESULT"; 
-        btn.style.opacity = "1";
     }
-}
     </script>
 </body>
 </html>

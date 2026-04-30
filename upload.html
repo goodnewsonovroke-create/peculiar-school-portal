@@ -172,7 +172,7 @@
             id: id,
             class: sClass,
             term: sTerm,
-            passport: passportData, // Saves the new Base64 text directly to the DB!
+            passport: passportData, 
             drawing: document.getElementById('drawing').value || 0,
             sports: document.getElementById('sports').value || 0,
             communication: document.getElementById('communication').value || 0,
@@ -199,8 +199,9 @@
             }
         });
 
+        // REPAIRED: The missing fetch and catch blocks are fully restored!
         try {
-            
+            const res = await fetch('/api/upload-bulk', {
                 method: 'POST', 
                 headers: {'Content-Type': 'application/json'}, 
                 body: JSON.stringify(payload)
@@ -212,8 +213,9 @@
             } else {
                 alert("❌ Server rejected the data. The image file might be too large.");
             }
-        } catch(e) { 
-            alert("❌ Connection failed. Ensure 'node server.js' is running."); 
+        } catch (err) {
+            console.error("Upload Error:", err);
+            alert("Network error: Could not reach the server.");
         } finally {
             btn.innerText = "SUBMIT RESULT TO DATABASE";
             btn.style.backgroundColor = "var(--PH-purple)";
