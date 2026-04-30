@@ -9,10 +9,9 @@ const app = express();
 // ==========================================
 // 2. MIDDLEWARE (How the server handles data)
 // ==========================================
+// This tells your server to accept large image payloads!
 app.use(express.json({ limit: '50mb' }));
-app.use(cors());
-app.use(express.static(__dirname)); // Serves your HTML/CSS files
-
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 // ==========================================
 // 3. DATABASE CONNECTION
 // ==========================================
@@ -78,7 +77,42 @@ app.get('/api/analytics-data', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+// TEMPORARY SETUP ROUTE TO BUILD YOUR AIVEN TABLES
+app.get('/api/setup-database', (req, res) => {
+    const createStudentsTable = `
+        CREATE TABLE IF NOT EXISTS students (
+            id VARCHAR(50) PRIMARY KEY,
+            name VARCHAR(100),
+            class VARCHAR(20),
+            term VARCHAR(20),
+            passport LONGTEXT,
+            drawing INT, sports INT, communication INT, 
+            leadership INT, self_control INT, neatness INT, 
+            punctuality INT, attitude INT,
+            t_comment TEXT, p_comment TEXT
+        )
+    `;
 
+    const createResultsTable = `
+        CREATE TABLE IF NOT EXISTS results (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            student_id VARCHAR(50),
+            subject VARCHAR(50),
+            ca INT,
+            exam INT,
+            FOREIGN KEY (student_id) REFERENCES students(id)
+        )
+    `;
+
+    db.query(createStudentsTable, (err1) => {
+        if (err1) return res.send("Error creating students table: " + err1.message);
+        
+        db.query(createResultsTable, (err2) => {
+            if (err2) return res.send("Error creating results table: " + err2.message);
+            res.send("✅ DATABASE TABLES CREATED SUCCESSFULLY! You can now upload students.");
+        });
+    });
+});
 // ==========================================
 // 5. START SERVER
 // ==========================================
