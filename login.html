@@ -6,8 +6,13 @@
     <title>Peculiar School Portal - Login</title>
     <link rel="stylesheet" href="styles.css"> 
 </head>
-<body class="portal-bg"> <div id="studentContainer" class="portal-container translucent-overlay">
-        <img src="school-logo.png" alt="Peculiar High School Logo">
+<body class="portal-bg"> 
+
+    <!-- ========================================== -->
+    <!-- 1. STUDENT RESULT PORTAL -->
+    <!-- ========================================== -->
+    <div id="studentContainer" class="portal-container translucent-overlay">
+        <img src="school-logo.png.jpg" alt="Peculiar High School Logo">
         <h2>STUDENT RESULT PORTAL</h2>
         <p>Check your academic performance securely.</p>
 
@@ -15,14 +20,17 @@
         <input type="text" id="studentId" placeholder="ENTER ID (e.g., PS/2026/5191)" required>
         
         <button id="searchBtn" onclick="checkResult()">SEARCH RESULT</button>
-        <p id="studentError" class="error-text" style="display: none;"></p>
+        <p id="studentError" class="error-text" style="color: red; display: none;"></p>
         
         <br>
         <a href="#" onclick="toggleStaffPortal(true)" class="portal-link">Staff Member? Access Portal</a>
     </div>
 
+    <!-- ========================================== -->
+    <!-- 2. STAFF PORTAL -->
+    <!-- ========================================== -->
     <div id="staffContainer" class="portal-container translucent-overlay" style="display: none;">
-        <img src="school-logo.png" alt="Peculiar High School Logo">
+        <img src="school-logo.png.jpg" alt="Peculiar High School Logo">
         <h2 style="margin-top: 5px;">STAFF PORTAL</h2>
         <p style="color: #FFD700; font-size: 14px; margin-top: -10px;">Authorized Personnel Only</p>
 
@@ -30,21 +38,20 @@
         <input type="password" id="staffPassword" placeholder="Password" required>
         
         <button id="staffLoginBtn" onclick="loginStaff()">LOGIN TO DASHBOARD</button>
-        <p id="staffError" class="error-text" style="display: none;"></p>
+        <p id="staffError" class="error-text" style="color: red; display: none;"></p>
         
         <br>
         <a href="#" onclick="toggleStaffPortal(false)" class="portal-link">Back to Student Search</a>
     </div>
 
     <script>
-        // FUNCTION: Toggle between Student and Staff views
+        // TOGGLE VIEWS
         function toggleStaffPortal(showStaff) {
             const studentBox = document.getElementById('studentContainer');
             const staffBox = document.getElementById('staffContainer');
-            const errorTexts = document.querySelectorAll('.error-text');
             
-            // Hide all errors
-            errorTexts.forEach(t => t.style.display = 'none');
+            document.getElementById('studentError').style.display = 'none';
+            document.getElementById('staffError').style.display = 'none';
 
             if (showStaff) {
                 studentBox.style.display = 'none';
@@ -55,7 +62,7 @@
             }
         }
 
-        // --- STUDENT: Check Result Logic (Clean & Working) ---
+        // STUDENT LOGIN LOGIC
         async function checkResult() {
             const name = document.getElementById('studentName').value;
             const id = document.getElementById('studentId').value;
@@ -72,7 +79,6 @@
             errorText.style.display = "none";
 
             try {
-                // Guaranteed relative path "fit to path"
                 const response = await fetch(`/api/check-result?name=${encodeURIComponent(name)}&id=${encodeURIComponent(id)}`);
                 const data = await response.json();
 
@@ -92,8 +98,8 @@
             }
         }
 
-        // --- STAFF: Login Logic (AESTHETIC & STRUCTURAL ONLY - No backend connected) ---
-        async function loginStaff() {
+        // STAFF LOGIN LOGIC (WITH REDIRECT FIX)
+        function loginStaff() {
             const staffId = document.getElementById('staffId').value;
             const password = document.getElementById('staffPassword').value;
             const errorText = document.getElementById('staffError');
@@ -108,32 +114,18 @@
             btn.innerText = "AUTHENTICATING...";
             errorText.style.display = "none";
 
-            try {
-                // Placeholder fetch: structured perfectly but will fail as endpoint doesn't exist
-                const response = await fetch(`/api/login-staff`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ staffId, password })
-                });
-
-                // This logic is structured, but you haven't created the backend for this yet!
-                const data = await response.json();
-                
-                if (response.ok) {
-                    alert("Staff Login Successful!"); // In future, will redirect to dashboard
+            // QUICK BYPASS: Since the staff database isn't built yet, this lets you in today!
+            setTimeout(() => {
+                if (staffId === "school") { 
+                    // This is the fix! It now sends you straight to the dashboard/upload site.
+                    // Note: If your upload page is named upload.html, change the word 'dashboard.html' below to 'upload.html'
+                    window.location.href = 'dashboard.html'; 
                 } else {
-                    errorText.innerText = data.error || "Staff login failed.";
+                    errorText.innerText = "Invalid Staff ID.";
                     errorText.style.display = "block";
+                    btn.innerText = "LOGIN TO DASHBOARD";
                 }
-
-            } catch (err) {
-                // Fallback since the backend route is missing
-                console.error("Staff Login Error:", err);
-                errorText.innerText = "Staff Login endpoint not yet active in server.js.";
-                errorText.style.display = "block";
-            } finally {
-                btn.innerText = "LOGIN TO DASHBOARD";
-            }
+            }, 800); // 800 millisecond delay to make it look like a real loading process
         }
     </script>
 </body>
