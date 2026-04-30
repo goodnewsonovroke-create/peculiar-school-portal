@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Staff Login - Peculiar School</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body class="page-base page-login"> 
+    
+    <div class="container" style="max-width: 400px; text-align: center;">
+        <img src="./school-logo.png.jpg" alt="Logo" width="100" style="border-radius: 5px;">
+        <h2 class="PH-purple line-condensed">STAFF PORTAL</h2>
+        <p class="PH-subtext">Authorized Personnel Only</p>
+        
+        <input type="text" id="staff_username" placeholder="Staff ID (e.g. Admin)">
+        <input type="password" id="staff_password" placeholder="Password">
+        
+        <button class="btn" onclick="secureLogin()">LOGIN TO DASHBOARD</button>
+        
+        <p id="error-msg" style="color: red; display: none; margin-top: 10px;">Incorrect ID or Password!</p>
+        <p style="margin-top: 20px;"><a href="index.html" style="color: #4b1c8d;">Back to Student Search</a></p>
+    </div>
+
+    <script>
+    function secureLogin() {
+        // The default credentials for testing
+        const user = document.getElementById('staff_username').value;
+        const pass = document.getElementById('staff_password').value;
+        const errorMsg = document.getElementById('error-msg');
+
+        // Security check
+        if (user === "Admin" && pass === "Peculiar2026") {
+            // Generates the security token so the dashboard lets you in
+            sessionStorage.setItem('staffLoggedIn', 'true');
+            window.location.href = 'dashboard.html';
+        } else {
+            errorMsg.style.display = "block";
+        }
+    }
+    </script>
+</body>
+</html>

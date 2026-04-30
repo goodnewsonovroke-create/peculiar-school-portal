@@ -2,91 +2,120 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Staff Dashboard - Peculiar Schools</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Staff Dashboard - Peculiar School Portal</title>
+    <link rel="stylesheet" href="./styles.css">
     <style>
-        .dash-container { max-width: 1000px; margin: 30px auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        th { background-color: #4b1c8d; color: white; }
-        .id-badge { background: #fbeaea; color: #9b1b21; padding: 4px 8px; border-radius: 4px; font-weight: bold; }
-        .btn-view { background: #4b1c8d; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; }
+        /* --- Specific Dashboard UI Layout --- */
+        .dashboard-header {
+            background-color: var(--PH-purple);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 30px 0;
+        }
+        
+        /* The Clickable Menu Cards */
+        .dash-card {
+            background: white;
+            border-top: 4px solid var(--PH-subtext); /* Gold accent line */
+            padding: 30px 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-decoration: none; /* Removes the ugly blue link underline */
+            color: #333;
+            display: block;
+        }
+        
+        /* The Hover Effect */
+        .dash-card:hover {
+            transform: translateY(-8px); /* Lifts the card up */
+            box-shadow: 0 12px 20px rgba(0,0,0,0.15); /* Deepens the shadow */
+        }
+        
+        .dash-icon {
+            font-size: 45px;
+            margin-bottom: 15px;
+        }
+        
+        .logout-btn {
+            background-color: #dc3545; /* Red warning color */
+            padding: 10px 15px;
+            width: auto;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .logout-btn:hover { background-color: #c82333; }
     </style>
 </head>
-<body>
-    <div class="dash-container">
-        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 2px solid #4b1c8d; padding-bottom:10px;">
-            <h2>STUDENT RESULT MANAGEMENT</h2>
-            <a href="upload.html" style="color: #4b1c8d; font-weight: bold;">+ Upload New Result</a>
-        </div>
+<body class="page-base page-dashboard"> <div class="container" style="max-width: 900px; padding: 0;">
         
-        <table id="studentTable">
-            <thead>
-                <tr>
-                    <th>Student Name</th>
-                    <th>Class</th>
-                    <th>Generated ID</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="dashBody">
-                </tbody>
-        </table>
-    </div>
+        <div class="dashboard-header">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <img src="./school-logo.png.jpg" width="55" alt="School Logo" style="background: white; border-radius: 50%; padding: 5px;">
+                <div>
+                    <h2 style="margin: 0; font-size: 22px;">Staff Control Center</h2>
+                    <p style="margin: 0; font-size: 13px; color: #e0e0e0;">Welcome back, Authorized Personnel</p>
+                </div>
+            </div>
+            <button class="btn logout-btn" onclick="secureLogout()">🚪 Secure Logout</button>
+        </div>
 
-   <script>
-    async function loadDashboard() {
-        const res = await fetch('/api/all-students');
-        const students = await res.json();
-        const body = document.getElementById('dashBody');
-        body.innerHTML = "";
+        <div style="padding: 20px 30px; background: rgba(255,255,255,0.95); border-radius: 0 0 8px 8px;">
+            <h3 class="PH-purple line-condensed" style="border-bottom: 2px solid #ccc; padding-bottom: 10px;">Quick Actions Menu</h3>
+            
+            <div class="dashboard-grid">
+                
+                <a href="upload.html" class="dash-card">
+                    <div class="dash-icon">📤</div>
+                    <h3 class="PH-purple" style="margin: 0 0 10px 0;">Upload New Result</h3>
+                    <p style="font-size: 13px; color: #666; margin: 0;">Enter student grades, generate IDs, and rate affective domains.</p>
+                </a>
 
-        students.forEach(s => {
-            body.innerHTML += `
-                <tr>
-                    <td><b>${s.student_name}</b></td>
-                    <td>${s.student_class}</td>
-                    <td><span class="id-badge">${s.student_id}</span></td>
-                    <td>
-                        <button onclick="viewResult('${s.student_name}', '${s.student_id}')" class="btn-view">View</button>
-                        <button onclick="deleteStudent('${s.student_id}', '${s.student_name}')" 
-                                style="background:#d01d1d; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; margin-left:10px;">
-                            Delete
-                        </button>
-                    </td>
-                </tr>`;
+                <a href="index.html" class="dash-card">
+                    <div class="dash-icon">🔍</div>
+                    <h3 class="PH-purple" style="margin: 0 0 10px 0;">Verify Result Slip</h3>
+                    <p style="font-size: 13px; color: #666; margin: 0;">Search the database to view, verify, and print existing terminal reports.</p>
+                </a>
+
+                <a href="analytics.html" class="dash-card">
+    <div class="dash-icon">📊</div>
+    <h3 class="PH-purple" style="margin: 0 0 10px 0;">School Analytics</h3>
+    <p style="font-size: 13px; color: #666; margin: 0;">View top-performing students, class averages, and database statistics.</p>
+</a>
+
+    <script>
+        // --- 🛡️ CYBERSECURITY CHECK ---
+        // If a student tries to bypass the login page and go straight to dashboard.html, 
+        // this script catches them because their browser won't have the secret 'staffLoggedIn' token.
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('staffLoggedIn') !== 'true') {
+                alert("⚠️ Access Denied! Security protocol requires you to login first.");
+                window.location.href = 'login.html'; // Kicks them out immediately
+            }
         });
-    }
 
-    async function deleteStudent(id, name) {
-        if (confirm(`Are you sure you want to delete all records for ${name}?`)) {
-            const res = await fetch(`/api/delete-student/${id}`, { method: 'DELETE' });
-            if (res.ok) {
-                alert("Student removed successfully");
-                loadDashboard(); // Refresh the list
+        // --- 🚪 LOGOUT FUNCTION ---
+        // Destroys the security token so nobody can use the computer after the teacher leaves
+        function secureLogout() {
+            if (confirm("Are you sure you want to log out of the portal?")) {
+                sessionStorage.removeItem('staffLoggedIn');
+                window.location.href = 'login.html';
             }
         }
-    }
-    window.onload = loadDashboard;
-</script>
+    </script>
 </body>
-<div style="background:bg-upload.jpg #fff3cd17; border: 1px solid #ffeeba; padding: 15px; text-align: center; font-family: sans-serif;">
-    <p style="margin: 0; color: #856404;">
-        <strong>Notice:</strong> You are on the <b>Free Plan</b>. Limit: 10 Students.
-        <a href="YOUR_PAYMENT_LINK_HERE" style="background: #28a745; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px; margin-left: 15px; font-weight: bold;">
-            🚀 UPGRADE TO PRO
-        </a>
-    </p>
-</div>
-<script>
-    // This function runs as soon as the page loads
-    window.onload = function() {
-        const password = prompt("Enter Staff Password:");
-        if (password === "peculiar2026") {
-            alert("Access Granted! Welcome to the Peculiar Portal.");
-        } else {
-            alert("Incorrect Staff Credentials. Returning to login.");
-            window.location.href = 'index.html'; 
-        }
-    };
-</script>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>School Analytics - Peculiar Portal</title>
+    <link rel="stylesheet" href="./styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .stat-box { background: white; padding: 20px; border-radius: 8px; text-align: center; border-top: 4px solid var(--PH-purple); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .stat-value { font-size: 32px; font-weight: bold; color: var(--PH-subtext); margin: 10px 0 0 0; }
+        .chart-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+    </style>
+</head>
+<body class="page-base page-dashboard">
+
+    <div class="container" style="max-width: 900px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ccc; padding-bottom: 15px; margin-bottom: 20px;">
+            <h2 class="PH-purple" style="margin: 0;">📊 School Analytics Engine</h2>
+            <button class="btn" style="width: auto; background-color: #555;" onclick="window.location.href='dashboard.html'">⬅️ Back to Dashboard</button>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <p style="margin: 0; font-weight: bold; color: #666;">Total Grade Entries</p>
+                <p class="stat-value" id="total_entries">0</p>
+            </div>
+            <div class="stat-box">
+                <p style="margin: 0; font-weight: bold; color: #666;">Overall Top Student</p>
+                <p class="stat-value" id="top_student" style="font-size: 20px; color: var(--PH-purple);">Loading...</p>
+            </div>
+            <div class="stat-box">
+                <p style="margin: 0; font-weight: bold; color: #666;">A-Grades Awarded</p>
+                <p class="stat-value" id="total_as">0</p>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h3 class="PH-purple" style="text-align: center; margin-top: 0;">Average Score by Subject</h3>
+            <canvas id="subjectChart" height="100"></canvas>
+        </div>
+    </div>
+
+    <script>
+        // Security check
+        if (sessionStorage.getItem('staffLoggedIn') !== 'true') {
+            window.location.href = 'login.html';
+        }
+
+        async function loadAnalytics() {
+            try {
+                const res = await fetch('http://localhost:3000/api/analytics-data');
+                const data = await res.json();
+
+                if(data.length === 0) return alert("No data in database yet!");
+
+                // 1. Calculate Total Entries
+                document.getElementById('total_entries').innerText = data.length;
+
+                // 2. Find Top Student and Count A's
+                let highestScore = 0;
+                let topName = "N/A";
+                let aCount = 0;
+                let subjectTotals = {};
+                let subjectCounts = {};
+
+                data.forEach(row => {
+                    // Check for A grades
+                    if(row.grade === 'A') aCount++;
+
+                    // Find Highest Single Score
+                    if(row.total > highestScore) {
+                        highestScore = row.total;
+                        topName = row.student_name;
+                    }
+
+                    // Group scores by subject for the chart
+                    if(!subjectTotals[row.subject]) {
+                        subjectTotals[row.subject] = 0;
+                        subjectCounts[row.subject] = 0;
+                    }
+                    subjectTotals[row.subject] += parseInt(row.total);
+                    subjectCounts[row.subject]++;
+                });
+
+                document.getElementById('top_student').innerText = topName + ` (${highestScore})`;
+                document.getElementById('total_as').innerText = aCount;
+
+                // 3. Calculate Averages for the Chart
+                const labels = Object.keys(subjectTotals);
+                const averages = labels.map(sub => (subjectTotals[sub] / subjectCounts[sub]).toFixed(1));
+
+                // 4. Draw the Professional Chart
+                const ctx = document.getElementById('subjectChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Class Average (%)',
+                            data: averages,
+                            backgroundColor: '#4b1c8d', // Peculiar Purple
+                            borderRadius: 5
+                        }]
+                    },
+                    options: { scales: { y: { beginAtZero: true, max: 100 } } }
+                });
+
+            } catch (err) {
+                console.error(err);
+                alert("❌ Failed to load analytics. Is the server running?");
+            }
+        }
+
+        // Run when the page loads
+        loadAnalytics();
+    </script>
+</body>
+</html>
