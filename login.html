@@ -98,7 +98,7 @@
             }
         }
 
-        // STAFF LOGIN LOGIC (WITH REDIRECT FIX)
+     // STAFF LOGIN LOGIC (WITH UPLOAD REDIRECT)
         function loginStaff() {
             const staffId = document.getElementById('staffId').value;
             const password = document.getElementById('staffPassword').value;
@@ -114,19 +114,19 @@
             btn.innerText = "AUTHENTICATING...";
             errorText.style.display = "none";
 
-            // QUICK BYPASS: Since the staff database isn't built yet, this lets you in today!
+            // QUICK BYPASS: Converts whatever you type to lowercase and removes spaces!
             setTimeout(() => {
-                if (staffId === "school") { 
-                    // This is the fix! It now sends you straight to the dashboard/upload site.
-                    // Note: If your upload page is named upload.html, change the word 'dashboard.html' below to 'upload.html'
-                    window.location.href = 'dashboard.html'; 
+                const cleanId = staffId.trim().toLowerCase(); 
+                
+                if (cleanId === "admin") { 
+                    // ✨ THIS IS THE FIX: It now sends you straight to upload.html ✨
+                    window.location.href = 'upload.html'; 
                 } else {
                     errorText.innerText = "Invalid Staff ID.";
                     errorText.style.display = "block";
                     btn.innerText = "LOGIN TO DASHBOARD";
                 }
-            }, 800); // 800 millisecond delay to make it look like a real loading process
+            }, 800);
         }
-    </script>
 </body>
 </html>

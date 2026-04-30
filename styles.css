@@ -132,4 +132,26 @@ th { background-color: var(--PH-purple); color: white; }
     text-decoration: underline;
     color: #4a00e0;
     font-size: 14px;
+}/* ========================================= */
+/* MAIN LOGIN BACKGROUND                     */
+/* ========================================= */
+.portal-bg {
+    /* Change 'bg-login.jpg' if your image has a different name! */
+    background-image: url('bg-login.jpg'); 
+    
+    /* These settings make it fit perfectly on phones AND laptops */
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    background-attachment: fixed; 
+    
+    /* Optional: A dark fallback color while the image loads */
+    background-color: #1a1a2e; 
+    
+    /* Centers the login box perfectly in the middle of the screen */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
 }
