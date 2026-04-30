@@ -49,7 +49,7 @@
 
         async function loadAnalytics() {
             try {
-                const res = await fetch('http://localhost:3000/api/analytics-data');
+                const res = await fetch('/api/login', { ... });
                 const data = await res.json();
 
                 if(data.length === 0) return alert("No data in database yet!");
