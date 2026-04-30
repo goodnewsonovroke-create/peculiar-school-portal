@@ -2,41 +2,65 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Staff Login - Peculiar School</title>
-    <link rel="stylesheet" href="./styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peculiar School Portal - Login</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body class="page-base page-login"> 
-    
-    <div class="container" style="max-width: 400px; text-align: center;">
-        <img src="./school-logo.png.jpg" alt="Logo" width="100" style="border-radius: 5px;">
-        <h2 class="PH-purple line-condensed">STAFF PORTAL</h2>
-        <p class="PH-subtext">Authorized Personnel Only</p>
+<body>
+
+    <div class="login-container">
+        <img src="school-logo.png.jpg" alt="Peculiar High School Logo">
+        <h2>STUDENT RESULT PORTAL</h2>
+        <p>Check your academic performance securely.</p>
+
+        <!-- Form fields -->
+        <input type="text" id="studentName" placeholder="ENTER FULL NAME" required>
+        <input type="text" id="studentId" placeholder="ENTER ID (e.g., PS/2026/5191)" required>
         
-        <input type="text" id="staff_username" placeholder="Staff ID (e.g. Admin)">
-        <input type="password" id="staff_password" placeholder="Password">
-        
-        <button class="btn" onclick="secureLogin()">LOGIN TO DASHBOARD</button>
-        
-        <p id="error-msg" style="color: red; display: none; margin-top: 10px;">Incorrect ID or Password!</p>
-        <p style="margin-top: 20px;"><a href="index.html" style="color: #4b1c8d;">Back to Student Search</a></p>
+        <button id="searchBtn" onclick="checkResult()">SEARCHING...</button>
+        <p id="errorMessage" style="color: red; display: none;"></p>
     </div>
 
     <script>
-    function secureLogin() {
-        // The default credentials for testing
-        const user = document.getElementById('staff_username').value;
-        const pass = document.getElementById('staff_password').value;
-        const errorMsg = document.getElementById('error-msg');
+        async function checkResult() {
+            const name = document.getElementById('studentName').value;
+            const id = document.getElementById('studentId').value;
+            const errorText = document.getElementById('errorMessage');
+            const btn = document.getElementById('searchBtn');
 
-        // Security check
-        if (user === "Admin" && pass === "Peculiar2026") {
-            // Generates the security token so the dashboard lets you in
-            sessionStorage.setItem('staffLoggedIn', 'true');
-            window.location.href = 'dashboard.html';
-        } else {
-            errorMsg.style.display = "block";
+            // Basic validation
+            if (!name || !id) {
+                errorText.innerText = "Please fill in all fields.";
+                errorText.style.display = "block";
+                return;
+            }
+
+            btn.innerText = "LOADING...";
+            errorText.style.display = "none";
+
+            try {
+                // ✅ CLEAN SHEET RULE: Relative path only. NO localhost!
+                const response = await fetch(`/api/check-result?name=${encodeURIComponent(name)}&id=${encodeURIComponent(id)}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Success! Redirect to results page and pass the data
+                    localStorage.setItem('studentData', JSON.stringify(data));
+                    window.location.href = 'results.html'; 
+                } else {
+                    // Server returned an error (like "Student not found")
+                    errorText.innerText = data.error || "Login failed.";
+                    errorText.style.display = "block";
+                }
+            } catch (err) {
+                // Network error (Server is down or unreachable)
+                console.error("Fetch error:", err);
+                errorText.innerText = "Network error. Unable to connect to the portal.";
+                errorText.style.display = "block";
+            } finally {
+                btn.innerText = "SEARCHING...";
+            }
         }
-    }
     </script>
 </body>
 </html>
