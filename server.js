@@ -16,14 +16,9 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 // 3. DATABASE CONNECTION
 // ==========================================
 // See how we changed createConnection to createPool right here? 👇
+// Look how clean this is now! We just use the Master Key.
 const db = mysql.createPool({
-    connectionLimit: 10,
-    host: 'mysql-1cd8eef8-peculiar-portal-01.h.aivencloud.com',
-    port: '12174', 
-    user: 'avnadmin',
-    password: 'process.env.DB_PASSWORD',
-    database: 'defaultdb',
-    // ADD THIS NEW SSL BLOCK HERE 👇
+    uri: process.env.DATABASE_URL,
     ssl: {
         rejectUnauthorized: false
     }
