@@ -80,7 +80,29 @@ app.post('/api/upload-bulk', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+// Route for Upload Page
+app.get('/upload', (req, res) => { res.sendFile(path.join(__dirname, 'upload.html')); });
+app.get('/upload.html', (req, res) => { res.sendFile(path.join(__dirname, 'upload.html')); });
 
+// Route for Verified Page
+app.get('/verified', (req, res) => { res.sendFile(path.join(__dirname, 'verified.html')); });
+app.get('/verified.html', (req, res) => { res.sendFile(path.join(__dirname, 'verified.html')); });
+
+// Route for Analytics Page
+app.get('/analytics', (req, res) => { res.sendFile(path.join(__dirname, 'analytics.html')); });
+app.get('/analytics.html', (req, res) => { res.sendFile(path.join(__dirname, 'analytics.html')); });
+
+// Route for Register Page
+app.get('/register', (req, res) => { res.sendFile(path.join(__dirname, 'register.html')); });
+app.get('/register.html', (req, res) => { res.sendFile(path.join(__dirname, 'register.html')); });
+
+// Route for Fees Page
+app.get('/fees', (req, res) => { res.sendFile(path.join(__dirname, 'fees.html')); });
+app.get('/fees.html', (req, res) => { res.sendFile(path.join(__dirname, 'fees.html')); });
+
+// Route for Results Page
+app.get('/results', (req, res) => { res.sendFile(path.join(__dirname, 'results.html')); });
+app.get('/results.html', (req, res) => { res.sendFile(path.join(__dirname, 'results.html')); });
 // --- CHECK RESULT ENDPOINT ---
 app.get('/api/check-result', async (req, res) => {
     try {
