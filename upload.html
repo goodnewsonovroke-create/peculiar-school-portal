@@ -1,29 +1,37 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Staff Result Upload - Peculiar High School</title>
-    <link rel="stylesheet" href="./styles.css">
-    <style>
-        .id-group { display: flex; gap: 10px; align-items: center; }
-        .id-group input { margin: 0; flex: 1; }
-        .btn-generate {
-            background-color: #D4AF37; color: #333; border: none;
-            padding: 10px 15px; cursor: pointer; border-radius: 4px;
-            font-weight: bold; white-space: nowrap;
-        }
-        .btn-generate:hover { background-color: #bda030; }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Result Upload - Peculiar Portal</title>
+    <!-- THIS IS THE CRUCIAL LINK -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="portal-bg"> <!-- This triggers the background image -->
+
+    <!-- This triggers the white glass box -->
+    <div class="portal-container"> 
         
-        /* New styling for the file upload box */
-        .file-upload-box {
-            grid-column: span 2;
-            border: 2px dashed var(--PH-purple);
-            padding: 15px;
-            text-align: center;
-            border-radius: 5px;
-            background-color: #fafafa;
-        }
-    </style>
+        <h2>Staff Result Upload Portal</h2>
+
+        <!-- Your form starts here -->
+        <form>
+            <input type="text" placeholder="Student Full Name (e.g. GOODNEWS ONOVROKE)">
+            
+            <div style="display: flex; gap: 10px;">
+                <input type="text" placeholder="Student ID">
+                <button type="button" class="btn-gold">Generate ID</button>
+            </div>
+
+            <!-- The rest of your tables and inputs go here! -->
+            
+            <button type="submit">SUBMIT RESULT TO DATABASE</button>
+        </form>
+
+    </div>
+
+</body>
+</html>
 </head>
 <body class="page-base page-upload">
     <div style="padding: 10px;">

@@ -1,157 +1,111 @@
-/* --- Global Peculiar School Styles --- */
-:root {
-    --PH-purple: #4b1c8d; /* Peculiar Purple */
-    --PH-subtext: #D4AF37; /* Metallic Gold */
-    --PH-address: #333; /* Dark Gray for readability */
-    --background-gray: url(bg.jpg)
-}
+/* ==========================================
+   PECULIAR SCHOOL PORTAL - MASTER STYLES
+   ========================================== */
 
-body {
+/* 1. Global Reset & Body Background */
+* {
+    box-sizing: border-box;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: var(--background-gray);
-    color: #333;
 }
 
-/* Base handling for full-screen background images */
-.page-base {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+body.portal-bg {
+    /* Make sure your background image matches this name exactly! */
+    background-image: url('bg-upload.jpg'); 
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
     background-attachment: fixed;
-    /* 1. Guarantees the background fits the page perfectly without repeating */
-.page-base {
-    min-height: 100vh;
-    width: 100%;
+    background-repeat: no-repeat;
+    margin: 0;
+    padding: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-size: cover; /* Forces image to scale and fit the screen */
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed; /* Keeps image still if the page scrolls */
+    min-height: 100vh;
 }
 
-/* 2. NEW: Pins the buttons to the top corners */
-.top-nav {
-    position: absolute; /* Breaks it out of the center alignment */
-    top: 20px;
-    left: 30px;
-    right: 30px;
-    display: flex;
-    justify-content: space-between; /* Pushes one to the left, one to the right */
-    z-index: 1000; /* Keeps buttons above the background */
-}
-}
-
-/* --- Unique Page Background Images --- */
-/* Update these lines in your styles.css */
-.page-login { 
-    background-image: linear-gradient(rgba(244, 244, 249, 0.4), rgba(244, 244, 249, 0.18)), url('./bg-login.jpg'); 
-} 
-.page-upload { 
-    background-image: linear-gradient(rgba(244, 244, 249, 0.85), rgba(244, 244, 249, 0.85)), url('./bg-upload.jpg'); 
-}
-.page-dashboard { 
-    background-image: linear-gradient(rgba(244, 244, 249, 0.85), rgba(244, 244, 249, 0.85)), url('./bg-dashboard.jpg'); 
-}
-/* Condensed spacing to fix the "too much" line-height issue */
-.line-condensed { line-height: 1.2 !important; margin: 5px 0 !important; }
-
-/* colored header text elements */
-.PH-purple { color: var(--PH-purple); }
-.PH-subtext { color: var(--PH-subtext); }
-.PH-address { color: var(--PH-address); }
-
-/* Main Container */
-.container {
-    max-width: 800px;
-    margin: 20px auto;
-    background: rgba(255, 255, 255, 0.07); /* Semi-transparent to view background */
-    padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-.btn {
-    background-color: var(--PH-purple);
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 16px;
+/* 2. The "Glass" Translucent Container */
+.portal-container {
+    background-color: rgba(255, 255, 255, 0.92); /* 92% solid white */
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
     width: 100%;
+    max-width: 900px; /* Wide enough for the upload table */
 }
 
-.btn:hover { background-color: #3a156e; }
+/* 3. Headers and Typography */
+h2, h3 {
+    color: #4a148c; /* Peculiar Deep Purple */
+    text-align: center;
+    margin-bottom: 20px;
+}
 
-input, select, textarea {
+.section-title {
+    color: #4a148c;
+    border-bottom: 2px solid #4a148c;
+    padding-bottom: 5px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+/* 4. Inputs and Forms */
+input[type="text"], 
+input[type="number"], 
+select, 
+textarea {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     margin: 8px 0;
     border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
+    border-radius: 6px;
+    font-size: 14px;
 }
 
+/* 5. Buttons */
+button {
+    background-color: #4a148c; /* Peculiar Deep Purple */
+    color: white;
+    padding: 14px 20px;
+    margin: 15px 0;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #380b70;
+}
+
+/* Gold Button variation for "Generate ID" and "Add Subject" */
+button.btn-gold {
+    background-color: #d4af37; /* Gold */
+    color: white;
+    width: auto;
+}
+
+button.btn-gold:hover {
+    background-color: #b5952f;
+}
+
+/* 6. Tables (For Subject Scores) */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 15px;
+    margin-top: 10px;
 }
 
-table, th, td { border: 1px solid #ddd; }
-/* Reduced table cell padding to fix excessive spacing */
-th, td { padding: 8px; text-align: center; }
-th { background-color: var(--PH-purple); color: white; }
-
-@media print {
-    .no-print { display: none; }
-    body { background: white; padding: 0; }
-    .container { box-shadow: none; border: 2px solid black; background: ;}(bg-login.jpg)
-}/* Styling to match the look of image_15.png */
-.translucent-overlay {
-    background: rgba(0, 0, 0, 0.7); /* Deep dark background with 70% transparency */
-    color: white; /* Make all main text white */
-    border-radius: 15px; /* Rounded corners */
-    padding: 30px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Soft shadow for depth */
+table th {
+    background-color: #4a148c;
+    color: white;
+    padding: 12px;
+    text-align: center;
 }
 
-.translucent-overlay h2 {
-    color: white !important; /* Ensure H2 is explicitly white */
-}
-
-.portal-link {
-    text-decoration: underline;
-    color: #4a00e0;
-    font-size: 14px;
-}/* ========================================= */
-/* MAIN LOGIN BACKGROUND                     */
-/* ========================================= */
-.portal-bg {
-    /* Change 'bg-login.jpg' if your image has a different name! */
-    background-image: url('bg-login.jpg'); 
-    
-    /* These settings make it fit perfectly on phones AND laptops */
-    background-size: cover; 
-    background-position: center; 
-    background-repeat: no-repeat; 
-    background-attachment: fixed; 
-    
-    /* Optional: A dark fallback color while the image loads */
-    background-color: #1a1a2e; 
-    
-    /* Centers the login box perfectly in the middle of the screen */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
+table td {
+    padding: 8px;
+    border: 1px solid #ddd;
 }
