@@ -29,7 +29,28 @@ const db = mysql.createPool({
 // ==========================================
 // 4. API ENDPOINTS (The "Routes")
 // ==========================================
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+// Route for the Login Page
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'login.html'));
+});
 
+// A backup route just in case your HTML links say href="login.html"
+app.get('/login.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'login.html'));
+});
+
+// Route for the Staff Dashboard
+app.get('/staff-dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, 'staff-dashboard.html'));
+});
+
+// Backup route for staff dashboard
+app.get('/staff-dashboard.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'staff-dashboard.html'));
+});
 // --- BULK UPLOAD ENDPOINT ---
 app.post('/api/upload-bulk', async (req, res) => {
     try {
