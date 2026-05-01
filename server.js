@@ -12,13 +12,7 @@ const app = express();
 // This tells your server to accept large image payloads!
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
-// This tells Express to make all your HTML, CSS, and images visible to the browser
-app.use(express.static(__dirname));
 
-// This tells Express to load your index.html file when someone visits the main link
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
 // ==========================================
 // 3. DATABASE CONNECTION
 // ==========================================
