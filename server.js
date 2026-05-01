@@ -51,6 +51,15 @@ app.get('/staff-dashboard', (req, res) => {
 app.get('/staff-dashboard.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'staff-dashboard.html'));
 });
+// Route for the Student Dashboard
+app.get('/dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dashboard.html'));
+});
+
+// Backup route for student dashboard
+app.get('/dashboard.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dashboard.html'));
+});
 // --- BULK UPLOAD ENDPOINT ---
 app.post('/api/upload-bulk', async (req, res) => {
     try {
