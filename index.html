@@ -2,23 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login - Peculiar School Portal</title>
-    <link rel="stylesheet" href=".styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peculiar School Portal - Student Access</title>
+    <!-- Your CSS is already working, this links to it! -->
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body class="page-base page-login"> 
-    <div class="container" style="max-width: 450px; text-align: center;">
-        <img src=".school-logo.png.jpg" alt="Logo" width="120">
-        <h2 class="PH-purple line-condensed">STUDENT RESULT PORTAL</h2>
-        <p class="PH-subtext line-condensed">Check your academic performance securely.</p>
+<!-- This class triggers your background image from styles.css -->
+<body class="portal-bg"> 
+
+    <!-- This div triggers the beautiful translucent glass box! -->
+    <div class="portal-container"> 
         
-        <input type="text" id="student_name" placeholder="FULL NAME (e.g. GOODNEWS OVIE ONAVROKE)">
-        <input type="text" id="student_id" placeholder="STUDENT ID (e.g. PS/2026/001)">
-        
-        <button class="btn" onclick="checkResult()">SEARCH RESULT</button>
-        
-        <p style="margin-top: 20px;"><a href="dashboard.html" style="color: #4b1c8d;">Staff Member? Access Portal</a></p>
+        <div style="text-align: center;">
+            <!-- IMPORTANT: Make sure your file in VS Code is named EXACTLY 'school-logo.jpg' -->
+            <img src="school-logo.jpg" alt="Peculiar High School Logo" style="width: 120px; margin-bottom: 10px;">
+            <h2>STUDENT RESULT PORTAL</h2>
+            <p>Check your academic performance securely.</p>
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+            <input type="text" id="studentName" placeholder="ENTER FULL NAME" required>
+            <input type="text" id="studentId" placeholder="ENTER ID (e.g., PS/2026/5191)" required>
+        </div>
+
+        <button id="searchBtn" onclick="checkResult()">SEARCH RESULT</button>
+        <p id="studentError" class="error-text" style="color: red; display: none; font-weight: bold; text-align: center;"></p>
+
+        <div style="text-align: center; margin-top: 15px;">
+            <!-- Link to Staff Login -->
+            <a href="/login" style="color: #d4af37; text-decoration: none; font-weight: bold; font-size: 14px;">Staff Member? Access Portal</a>
+        </div>
+
     </div>
 
+</body>
+</html>
     <script>
     async function checkResult() {
         const name = document.getElementById('student_name').value.trim();
