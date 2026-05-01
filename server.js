@@ -17,12 +17,16 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 // ==========================================
 // See how we changed createConnection to createPool right here? 👇
 const db = mysql.createPool({
-    connectionLimit: 10,       // Adds support for multiple users at once
+    connectionLimit: 10,
     host: 'YOUR_AIVEN_HOST_LINK',
     port: 'YOUR_AIVEN_PORT', 
     user: 'avnadmin',
     password: 'YOUR_AIVEN_PASSWORD',
-    database: 'defaultdb' 
+    database: 'defaultdb',
+    // ADD THIS NEW SSL BLOCK HERE 👇
+    ssl: {
+        rejectUnauthorized: false
+    }
 });
 
 // ==========================================
