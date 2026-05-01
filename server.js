@@ -81,41 +81,40 @@ app.get('/api/analytics-data', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
-// TEMPORARY SETUP ROUTE TO BUILD YOUR AIVEN TABLES
-app.get('/api/setup-database', (req, res) => {
-    const createStudentsTable = `
-        CREATE TABLE IF NOT EXISTS students (
-            id VARCHAR(50) PRIMARY KEY,
-            name VARCHAR(100),
-            class VARCHAR(20),
-            term VARCHAR(20),
-            passport LONGTEXT,
-            drawing INT, sports INT, communication INT, 
-            leadership INT, self_control INT, neatness INT, 
-            punctuality INT, attitude INT,
-            t_comment TEXT, p_comment TEXT
-        )
-    `;
+// MODERN PROMISE-BASED SETUP ROUTE
+app.get('/api/setup-database', async (req, res) => {
+    try {
+        const createStudentsTable = `
+            CREATE TABLE IF NOT EXISTS students (
+                id VARCHAR(50) PRIMARY KEY, name VARCHAR(100), class VARCHAR(20), 
+                term VARCHAR(20), passport LONGTEXT, drawing INT, sports INT, 
+                communication INT, leadership INT, self_control INT, neatness INT, 
+                punctuality INT, attitude INT, t_comment TEXT, p_comment TEXT
+            )
+        `;
 
-    const createResultsTable = `
-        CREATE TABLE IF NOT EXISTS results (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            student_id VARCHAR(50),
-            subject VARCHAR(50),
-            ca INT,
-            exam INT,
-            FOREIGN KEY (student_id) REFERENCES students(id)
-        )
-    `;
+        const createResultsTable = `
+            CREATE TABLE IF NOT EXISTS results (
+                id INT AUTO_INCREMENT PRIMARY KEY, student_id VARCHAR(50), 
+                subject VARCHAR(50), ca INT, exam INT, 
+                FOREIGN KEY (student_id) REFERENCES students(id)
+            )
+        `;
 
-    db.query(createStudentsTable, (err1) => {
-        if (err1) return res.send("Error creating students table: " + err1.message);
-        
-        db.query(createResultsTable, (err2) => {
-            if (err2) return res.send("Error creating results table: " + err2.message);
-            res.send("✅ DATABASE TABLES CREATED SUCCESSFULLY! You can now upload students.");
-        });
-    });
+        if (!db) {
+            return res.send("<h1>🚨 ERROR: 'db' is missing!</h1>");
+        }
+
+        // We use 'await' here instead of callbacks!
+        await db.query(createStudentsTable);
+        await db.query(createResultsTable);
+
+        res.send("<h1>✅ DATABASE TABLES CREATED SUCCESSFULLY!</h1>");
+
+    } catch (error) {
+        // This catches any crashes and prints them
+        res.send("<h1>🚨 SERVER CRASHED:</h1> <p>" + error.message + "</p>");
+    }
 });
 // ==========================================
 // 5. START SERVER
