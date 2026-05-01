@@ -18,10 +18,10 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 // See how we changed createConnection to createPool right here? 👇
 const db = mysql.createPool({
     connectionLimit: 10,
-    host: 'YOUR_AIVEN_HOST_LINK',
-    port: 'YOUR_AIVEN_PORT', 
+    host: 'mysql-1cd8eef8-peculiar-portal-01.h.aivencloud.com',
+    port: '12174', 
     user: 'avnadmin',
-    password: 'YOUR_AIVEN_PASSWORD',
+    password: 'process.env.DB_PASSWORD,',
     database: 'defaultdb',
     // ADD THIS NEW SSL BLOCK HERE 👇
     ssl: {
