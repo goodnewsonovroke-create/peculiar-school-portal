@@ -21,7 +21,7 @@ const db = mysql.createPool({
     host: 'mysql-1cd8eef8-peculiar-portal-01.h.aivencloud.com',
     port: '12174', 
     user: 'avnadmin',
-    password: 'process.env.DB_PASSWORD,',
+    password: 'process.env.DB_PASSWORD',
     database: 'defaultdb',
     // ADD THIS NEW SSL BLOCK HERE 👇
     ssl: {
@@ -81,7 +81,7 @@ app.get('/api/analytics-data', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
-// MODERN PROMISE-BASED SETUP ROUTE
+// SUPER DETECTIVE SETUP ROUTE
 app.get('/api/setup-database', async (req, res) => {
     try {
         const createStudentsTable = `
@@ -105,15 +105,28 @@ app.get('/api/setup-database', async (req, res) => {
             return res.send("<h1>🚨 ERROR: 'db' is missing!</h1>");
         }
 
-        // We use 'await' here instead of callbacks!
         await db.query(createStudentsTable);
         await db.query(createResultsTable);
 
         res.send("<h1>✅ DATABASE TABLES CREATED SUCCESSFULLY!</h1>");
 
     } catch (error) {
-        // This catches any crashes and prints them
-        res.send("<h1>🚨 SERVER CRASHED:</h1> <p>" + error.message + "</p>");
+        let debugText = "Password is completely missing in Render!";
+        
+        // This safely checks what Render thinks the password is
+        if (process.env.DB_PASSWORD) {
+            let pwd = process.env.DB_PASSWORD;
+            debugText = `Render sees a password that is <b>${pwd.length}</b> characters long. <br>
+                         It starts with <b>'${pwd.substring(0, 2)}'</b> and ends with <b>'${pwd.substring(pwd.length - 2)}'</b>.`;
+        }
+
+        res.send(`
+            <h1 style="color: red;">🚨 SERVER CRASHED:</h1> 
+            <p>${error.message}</p>
+            <hr>
+            <h2>🕵️ Detective Report:</h2>
+            <p style="font-size: 18px;">${debugText}</p>
+        `);
     }
 });
 // ==========================================
