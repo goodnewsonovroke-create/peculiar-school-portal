@@ -1,10 +1,12 @@
 // ==========================================
 // 1. SETUP & IMPORTS
 // ==========================================
+const express = require('express'); // <-- ADD THIS LINE RIGHT HERE!
 const mysql = require('mysql2/promise');
 const path = require('path');
 const cors = require('cors');
-const app = express();
+
+const app = express(); // Now the server knows what express is!
 
 // ==========================================
 // 2. MIDDLEWARE (How the server handles data)
@@ -12,7 +14,6 @@ const app = express();
 // This tells your server to accept large image payloads!
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
-
 // ==========================================
 // 3. DATABASE CONNECTION
 // ==========================================
